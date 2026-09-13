@@ -1,0 +1,24 @@
+services:
+  nn-api:
+    image: bozlak/local_nn_api:0.1
+    container_name: nn-api
+    restart: unless-stopped
+    # The API has no authentication: publish it on the host's loopback only.
+    ports:
+      - "127.0.0.1:${NN_API_PORT:-8079}:8079"
+    environment:
+      NN_API_LOG: ${NN_API_LOG:-info,tower_http=info}
+      NN_API_BODY_LIMIT_MB: ${NN_API_BODY_LIMIT_MB:-32}
+      NN_API_MAX_MODELS: ${NN_API_MAX_MODELS:-256}
+      # Only needed when a browser calls the API directly.
+      # NN_API_CORS: permissive
+      # File input (x_path / y_path): uncomment together with the volume below.
+      # NN_API_DATA_DIR: /data
+    # volumes:
+    #   - ./data:/data:ro
+
+
+  #--------------------------------------------------
+  #-------- Other services can be added here --------
+  #--------------------------------------------------
+
