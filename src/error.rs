@@ -13,6 +13,7 @@ use axum::extract::rejection::JsonRejection;
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
 use serde::Serialize;
+use utoipa::ToSchema;
 
 /// An error on its way back to the client: an HTTP status, a stable machine
 /// readable code, and a message meant for the developer reading the response.
@@ -72,21 +73,30 @@ impl ApiError {
     }
 }
 
-#[derive(Serialize)]
-struct ErrorEnvelope<'a> {
-    error: ErrorDetail<'a>,
+/// The body of every non-2xx answer. It is the type the server actually
+/// serialises, not a description kept beside it, so the OpenAPI schema cannot
+/// drift from what goes on the wire.
+#[derive(Debug, Serialize, ToSchema)]
+pub struct ErrorResponse {
+    pub error: ErrorDetail,
 }
 
-#[derive(Serialize)]
-struct ErrorDetail<'a> {
-    code: &'a str,
-    message: &'a str,
+#[derive(Debug, Serialize, ToSchema)]
+pub struct ErrorDetail {
+    /// Stable and machine readable: `invalid_request`, `invalid_json`,
+    /// `not_found`, `method_not_allowed`, `conflict`, `payload_too_large`,
+    /// `unsupported_media_type`, `engine_error` or `internal_error`.
+    #[schema(example = "invalid_request")]
+    pub code: String,
+    /// For the developer reading the response: what is wrong and what to send instead.
+    #[schema(example = "the model takes 2 features per sample, but row 0 of 'x' has 3")]
+    pub message: String,
 }
 
 impl IntoResponse for ApiError {
     fn into_response(self) -> Response {
-        let body = Json(ErrorEnvelope {
-            error: ErrorDetail { code: self.code, message: &self.message },
+        let body = Json(ErrorResponse {
+            error: ErrorDetail { code: self.code.to_string(), message: self.message },
         });
 
         (self.status, body).into_response()

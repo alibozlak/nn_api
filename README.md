@@ -10,7 +10,7 @@ The endpoints follow Keras, because neuralflow does:
 | Keras | this API |
 | --- | --- |
 | `Sequential([Input(shape=(2,)), Dense(8, activation='relu')])` + `compile(...)` | `POST /create-compile-model` |
-| `model.fit(X, y, epochs=500)` | `POST /models/{id}/train` |
+| `model.fit(X, y, epochs=500)` | `POST /models/{id}/train`, or `POST /train-with-column-scale` to scale first |
 | `model.predict(X)` | `POST /models/{id}/predict` |
 | `model.evaluate(X, y)` | `POST /models/{id}/evaluate` |
 | `model.get_weights()` / `set_weights(...)` | `GET` / `PUT /models/{id}/weights` |
@@ -23,6 +23,10 @@ The endpoints follow Keras, because neuralflow does:
 cargo run --release          # debug builds train roughly 10x slower
 curl http://127.0.0.1:8079/health
 ```
+
+Then open **http://127.0.0.1:8079/swagger-ui/**. Every endpoint is there with
+its request and response schemas, and each request comes with an example that
+"Try it out" sends to the running server as it is.
 
 | Variable | Default | What it does |
 | --- | --- | --- |
@@ -50,12 +54,16 @@ GET    /models                  list them, newest first
 GET    /models/{id}             one model, with Keras' summary table
 DELETE /models/{id}             204, and the id stops working
 POST   /models/{id}/train       fit
+POST   /train-with-column-scale fit, after column_based_scaling
 POST   /models/{id}/predict     predict
 POST   /models/{id}/evaluate    evaluate, without training
 GET    /models/{id}/weights     get_weights
 PUT    /models/{id}/weights     set_weights
 GET    /models/{id}/onnx        the model as an ONNX file (bytes, not JSON)
 POST   /utils/scale             column_based_scaling
+
+GET    /swagger-ui/             Swagger UI over all of the above
+GET    /api-docs/openapi.json   the OpenAPI 3.1 document it reads
 ```
 
 `/models` itself only lists; creating one is `POST /create-compile-model`,
@@ -183,6 +191,58 @@ first one left, and `trained_epochs` counts every epoch the model has ever run.
 Adam's momentum, though, starts fresh on each call -- one long call and two
 short ones are not quite the same run.
 
+### `POST /train-with-column-scale`
+
+`train`, with `x` and `y` passed through `column_based_scaling` before `fit`
+sees them -- for columns counted on very different scales, such as floor area
+in thousands against a price in hundreds of thousands. The body is a train
+body plus the model's id, which the path does not carry:
+
+```json
+{
+  "model_id": "0583b9da-ba2a-4737-88ca-410819418c85",
+  "x": [[1500, 3], [2500, 4], [1800, 3], [3200, 5]],
+  "y": [[250000], [410000], [300000], [520000]],
+  "epochs": 500
+}
+```
+
+It runs in this order, and nothing is scaled until every check has passed:
+
+1. everything a train request checks -- the model exists, `epochs`, `x` and `y`
+   inline or from a file, the feature count, as many `y` rows as `x` rows,
+   `batch_size`, a loss to train against, no infinite values;
+2. that the model's last layer has exactly one unit, since
+   `column_based_scaling` scales `y` as a single column;
+3. `column_based_scaling` on `x` and `y`;
+4. `fit` on the scaled values, storing the weights like any train call.
+
+The answer is a train answer plus the power of ten each column was divided by,
+`x`'s columns first and `y`'s last -- the same `ten_power_ratios` that
+`POST /utils/scale` returns for the same data:
+
+```json
+{
+  "id": "0583b9da-...",
+  "epochs": 500,
+  "samples": 4,
+  "initial_loss": 10.645242778232175,
+  "final_loss": 0.010431174698585463,
+  "ten_power_ratios": [3, 0, 5],
+  ...
+}
+```
+
+The losses are measured on the scaled values. And the ratios matter after
+training, because **`predict` and `evaluate` do not scale**: divide column `j`
+of their `x` by `10^ten_power_ratios[j]` before sending it, and multiply a
+prediction by `10^` the last entry to read it back in the original units.
+
+Each ratio comes from its column's **first row** of the data sent. A later call
+on the same model whose first row has a different number of integer digits
+gets different ratios, and the model is then trained on two scales at once, so
+keep the first ratios and send data that produces them again.
+
 ### `POST /models/{id}/predict`
 
 ```json
@@ -301,6 +361,13 @@ connection.
 
 ## Calling it from Java
 
+The OpenAPI document at `/api-docs/openapi.json` is generated from the same
+types that parse and answer requests, so a client generated from it matches
+the server. On the Spring Boot side, `openapi-generator` (its Maven or Gradle
+plugin, generator `java` with the `restclient` or `webclient` library) turns it
+into typed request and response classes. The rest of this section calls the
+API by hand instead.
+
 JDK 11 and up, no dependencies beyond a JSON library:
 
 ```java
@@ -392,7 +459,7 @@ Three things to watch on the Java side:
 ## Development
 
 ```bash
-cargo test      # 26 integration tests over the real router, 2 unit tests
+cargo test      # 32 integration tests over the real router, 2 unit tests
 cargo clippy --all-targets
 ```
 

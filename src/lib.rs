@@ -9,16 +9,21 @@
 //! GET    /models/{id}             one model, summary table included
 //! DELETE /models/{id}
 //! POST   /models/{id}/train       Keras' fit
+//! POST   /train-with-column-scale fit on column_based_scaling'd data
 //! POST   /models/{id}/predict     Keras' predict
 //! POST   /models/{id}/evaluate    Keras' evaluate
 //! GET    /models/{id}/weights     Keras' get_weights
 //! PUT    /models/{id}/weights     Keras' set_weights
 //! GET    /models/{id}/onnx        the model as an ONNX file
 //! POST   /utils/scale             column_based_scaling
+//!
+//! GET    /swagger-ui/             Swagger UI over all of the above
+//! GET    /api-docs/openapi.json   the OpenAPI document it reads
 //! ```
 
 pub mod config;
 pub mod dataset;
+pub mod docs;
 pub mod dto;
 pub mod engine;
 pub mod error;
@@ -29,12 +34,13 @@ pub mod store;
 
 use axum::Router;
 use axum::extract::DefaultBodyLimit;
-use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing::{get, post};
 use tower_http::catch_panic::CatchPanicLayer;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
 
 use crate::config::Config;
 use crate::error::{ApiError, panic_message};
@@ -51,11 +57,13 @@ pub fn app(state: AppState) -> Router {
         .route("/models", get(routes::list_models))
         .route("/models/{id}", get(routes::get_model).delete(routes::delete_model))
         .route("/models/{id}/train", post(routes::train))
+        .route("/train-with-column-scale", post(routes::train_with_column_scale))
         .route("/models/{id}/predict", post(routes::predict))
         .route("/models/{id}/evaluate", post(routes::evaluate))
         .route("/models/{id}/weights", get(routes::get_weights).put(routes::set_weights))
         .route("/models/{id}/onnx", get(routes::export_onnx))
         .route("/utils/scale", post(routes::scale))
+        .merge(SwaggerUi::new(docs::UI_PATH).url(docs::SPEC_PATH, docs::ApiDoc::openapi()))
         .fallback(routes::not_found)
         .method_not_allowed_fallback(method_not_allowed)
         // Inline training data arrives as JSON numbers, so this caps how many
@@ -80,7 +88,7 @@ pub fn app_from_config(config: Config) -> Router {
 }
 
 async fn method_not_allowed() -> ApiError {
-    ApiError::method_not_allowed("that path exists, but not with this method; the README lists what each route accepts")
+    ApiError::method_not_allowed("that path exists, but not with this method; /swagger-ui/ lists what each route accepts")
 }
 
 /// Keeps a panic from closing the connection with nothing on it.
@@ -88,11 +96,5 @@ fn panic_to_json(payload: Box<dyn std::any::Any + Send + 'static>) -> axum::resp
     let message = panic_message(&payload);
     tracing::error!(panic = %message, "a handler panicked");
 
-    (
-        StatusCode::INTERNAL_SERVER_ERROR,
-        axum::Json(serde_json::json!({
-            "error": { "code": "internal_error", "message": message }
-        })),
-    )
-        .into_response()
+    ApiError::internal(message).into_response()
 }

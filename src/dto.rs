@@ -8,6 +8,7 @@ use std::fmt;
 
 use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 
 use crate::config::{Config, Limits};
@@ -27,6 +28,26 @@ pub enum OptimizerRequest {
     /// Just the name, so the optimizer's own default learning rate.
     Kind(OptimizerKind),
     Config { kind: OptimizerKind, learning_rate: Option<f64> },
+}
+
+/// What `optimizer` looks like on the wire, for the OpenAPI schema only:
+/// [`OptimizerRequest`] parses it by hand, so utoipa cannot read the shape off
+/// that type.
+#[derive(Deserialize, ToSchema)]
+#[serde(untagged)]
+#[schema(as = OptimizerRequest)]
+#[allow(dead_code)]
+pub enum OptimizerRequestSchema {
+    /// Just the name, so the optimizer's own default learning rate:
+    /// 0.001 for Adam, 0.01 for SGD.
+    Name(OptimizerKind),
+    /// The name and a learning rate.
+    Config {
+        #[serde(rename = "type")]
+        kind: OptimizerKind,
+        #[schema(example = 0.05)]
+        learning_rate: Option<f64>,
+    },
 }
 
 impl<'de> Deserialize<'de> for OptimizerRequest {
@@ -91,7 +112,7 @@ impl OptimizerRequest {
 }
 
 /// Keras' `Dense(units, activation=..., name=...)`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
 pub struct LayerRequest {
     pub units: usize,
@@ -103,8 +124,20 @@ pub struct LayerRequest {
 }
 
 /// `POST /create-compile-model`
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[schema(example = json!({
+    "name": "xor",
+    "features": 2,
+    "seed": 1234,
+    "layers": [
+        { "units": 8, "activation": "relu", "name": "layer1" },
+        { "units": 1, "activation": "sigmoid", "name": "layer2" }
+    ],
+    "loss": "binary_crossentropy",
+    "optimizer": { "type": "adam", "learning_rate": 0.05 },
+    "batch_size": 4
+}))]
 pub struct CreateModelRequest {
     #[serde(default)]
     pub name: Option<String>,
@@ -117,6 +150,7 @@ pub struct CreateModelRequest {
     #[serde(default)]
     pub loss: Option<LossKind>,
     #[serde(default)]
+    #[schema(value_type = Option<OptimizerRequestSchema>)]
     pub optimizer: Option<OptimizerRequest>,
     /// Makes the initial weights and the batch order reproducible. Left out or
     /// null, the server draws one and reports it back, so the model can still
@@ -192,8 +226,14 @@ impl CreateModelRequest {
 }
 
 /// `POST /models/{id}/train` -- Keras' `fit`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[schema(example = json!({
+    "x": [[0, 0], [0, 1], [1, 0], [1, 1]],
+    "y": [[0], [1], [1], [0]],
+    "epochs": 500,
+    "return_history": false
+}))]
 pub struct TrainRequest {
     /// One row per sample, one column per feature. Send this or `x_path`.
     #[serde(default)]
@@ -222,6 +262,7 @@ pub struct TrainRequest {
     #[serde(default)]
     pub loss: Option<LossKind>,
     #[serde(default)]
+    #[schema(value_type = Option<OptimizerRequestSchema>)]
     pub optimizer: Option<OptimizerRequest>,
     /// Reseeds the model before this run.
     #[serde(default)]
@@ -232,10 +273,88 @@ pub struct TrainRequest {
     pub return_history: bool,
 }
 
-/// `POST /models/{id}/predict` -- Keras' `predict`.
-#[derive(Debug, Clone, Deserialize)]
+/// `POST /train-with-column-scale` -- Keras' `fit` on data `column_based_scaling`
+/// has divided down first. The same fields as a train request, and the model id
+/// with them, since the path carries none.
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[schema(example = json!({
+    "model_id": "0583b9da-ba2a-4737-88ca-410819418c85",
+    "x": [[1500, 3], [2500, 4], [1800, 3], [3200, 5]],
+    "y": [[250000], [410000], [300000], [520000]],
+    "epochs": 500,
+    "return_history": false
+}))]
+pub struct ScaledTrainRequest {
+    /// The model to train: the id `POST /create-compile-model` returned. Its
+    /// last layer must have exactly one unit, as `y` may only have one column.
+    #[schema(value_type = String, format = Uuid)]
+    pub model_id: String,
+    /// One row per sample, one column per feature. Send this or `x_path`.
+    #[serde(default)]
+    pub x: Option<Vec<Vec<f64>>>,
+    /// A JSON file below the server's data directory holding the same array
+    /// `x` would have held, for data too big to put in the request.
+    #[serde(default)]
+    pub x_path: Option<String>,
+    /// One row per sample, one column per unit of the last layer.
+    #[serde(default)]
+    pub y: Option<Vec<Vec<f64>>>,
+    /// `y` from a file, like `x_path`.
+    #[serde(default)]
+    pub y_path: Option<String>,
+    /// Keras' default is 1.
+    #[serde(default = "default_epochs")]
+    pub epochs: usize,
+    /// Samples per gradient step; more than the data set has means one step per
+    /// epoch. Left out, the model's own default is used. It applies to this run
+    /// only and does not change that default.
+    #[serde(default)]
+    pub batch_size: Option<usize>,
+    #[serde(default = "default_true")]
+    pub shuffle: bool,
+    /// Compiles the model before training, like calling `compile` again.
+    #[serde(default)]
+    pub loss: Option<LossKind>,
+    #[serde(default)]
+    #[schema(value_type = Option<OptimizerRequestSchema>)]
+    pub optimizer: Option<OptimizerRequest>,
+    /// Reseeds the model before this run.
+    #[serde(default)]
+    pub seed: Option<u64>,
+    /// `false` leaves the per-epoch losses out of the response, which matters
+    /// when the run is tens of thousands of epochs long.
+    #[serde(default = "default_true")]
+    pub return_history: bool,
+}
+
+impl ScaledTrainRequest {
+    /// The model id, and everything else as the train request it otherwise is.
+    pub fn into_parts(self) -> (String, TrainRequest) {
+        let request = TrainRequest {
+            x: self.x,
+            x_path: self.x_path,
+            y: self.y,
+            y_path: self.y_path,
+            epochs: self.epochs,
+            batch_size: self.batch_size,
+            shuffle: self.shuffle,
+            loss: self.loss,
+            optimizer: self.optimizer,
+            seed: self.seed,
+            return_history: self.return_history,
+        };
+
+        (self.model_id, request)
+    }
+}
+
+/// `POST /models/{id}/predict` -- Keras' `predict`.
+#[derive(Debug, Clone, Deserialize, ToSchema)]
+#[serde(deny_unknown_fields)]
+#[schema(example = json!({ "x": [[0, 0], [0, 1], [1, 0], [1, 1]] }))]
 pub struct PredictRequest {
+    /// One row per sample, one column per feature. Send this or `x_path`.
     #[serde(default)]
     pub x: Option<Vec<Vec<f64>>>,
     /// `x` from a JSON file below the server's data directory.
@@ -244,14 +363,17 @@ pub struct PredictRequest {
 }
 
 /// `POST /models/{id}/evaluate` -- Keras' `evaluate`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[schema(example = json!({ "x": [[0, 0], [0, 1], [1, 0], [1, 1]], "y": [[0], [1], [1], [0]] }))]
 pub struct EvaluateRequest {
+    /// One row per sample, one column per feature. Send this or `x_path`.
     #[serde(default)]
     pub x: Option<Vec<Vec<f64>>>,
     /// `x` from a JSON file below the server's data directory.
     #[serde(default)]
     pub x_path: Option<String>,
+    /// One row per sample, one column per unit of the last layer. Send this or `y_path`.
     #[serde(default)]
     pub y: Option<Vec<Vec<f64>>>,
     /// `y` from a JSON file below the server's data directory.
@@ -263,7 +385,7 @@ pub struct EvaluateRequest {
 }
 
 /// `PUT /models/{id}/weights` -- Keras' `set_weights`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
 pub struct SetWeightsRequest {
     /// Layers left out keep the weights they have.
@@ -271,8 +393,9 @@ pub struct SetWeightsRequest {
 }
 
 /// `POST /utils/scale` -- `column_based_scaling`.
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize, ToSchema)]
 #[serde(deny_unknown_fields)]
+#[schema(example = json!({ "x": [[1500, 3], [2500, 4]], "y": [[250000], [300000]] }))]
 pub struct ScaleRequest {
     pub x: Vec<Vec<f64>>,
     /// Exactly one column, the way `manipulate_datas_between_0_and_10` wants it.
@@ -292,7 +415,7 @@ fn default_true() -> bool {
 
 // --------------------------------------------------------------- responses
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct LayerResponse {
     pub name: String,
     pub units: usize,
@@ -303,7 +426,7 @@ pub struct LayerResponse {
 }
 
 /// One model in full, Keras' `summary()` included.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ModelResponse {
     pub id: Uuid,
     pub name: String,
@@ -363,7 +486,7 @@ impl ModelResponse {
 }
 
 /// A model in the list, without the summary table.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ModelListEntry {
     pub id: Uuid,
     pub name: String,
@@ -400,14 +523,14 @@ impl From<&StoredModel> for ModelListEntry {
     }
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ModelListResponse {
     pub count: usize,
     pub models: Vec<ModelListEntry>,
 }
 
 /// What `fit` returned, plus what it cost.
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct TrainResponse {
     pub id: Uuid,
     pub epochs: usize,
@@ -427,7 +550,22 @@ pub struct TrainResponse {
     pub duration_ms: u64,
 }
 
-#[derive(Debug, Clone, Serialize)]
+/// A train response, plus how the data was scaled before `fit` saw it.
+#[derive(Debug, Clone, Serialize, ToSchema)]
+pub struct ScaledTrainResponse {
+    #[serde(flatten)]
+    pub training: TrainResponse,
+    /// The power of ten each column was divided by: one entry per column of
+    /// `x`, then `y`'s as the last. Taken from each column's first row.
+    ///
+    /// `predict` and `evaluate` do not scale, so divide column `j` of their `x`
+    /// by `10^ten_power_ratios[j]`, and multiply a prediction by
+    /// `10^` the last entry to read it in the original units.
+    #[schema(example = json!([3, 0, 5]))]
+    pub ten_power_ratios: Vec<usize>,
+}
+
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct PredictResponse {
     pub id: Uuid,
     pub rows: usize,
@@ -436,7 +574,7 @@ pub struct PredictResponse {
     pub predictions: Vec<Vec<f64>>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct EvaluateResponse {
     pub id: Uuid,
     pub loss_function: LossKind,
@@ -444,13 +582,13 @@ pub struct EvaluateResponse {
     pub samples: usize,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct WeightsResponse {
     pub id: Uuid,
     pub layers: Vec<LayerWeights>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct ScaleResponse {
     pub x: Vec<Vec<f64>>,
     pub y: Vec<Vec<f64>>,
@@ -459,7 +597,7 @@ pub struct ScaleResponse {
     pub ten_power_ratios: Vec<usize>,
 }
 
-#[derive(Debug, Clone, Serialize)]
+#[derive(Debug, Clone, Serialize, ToSchema)]
 pub struct HealthResponse {
     pub status: &'static str,
     pub service: &'static str,

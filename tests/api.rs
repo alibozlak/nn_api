@@ -832,3 +832,235 @@ async fn x_must_arrive_exactly_one_way() {
 
     let _ = std::fs::remove_dir_all(&dir);
 }
+
+// ---------------------------------------------------------------- swagger
+
+const OPENAPI: &str = "/api-docs/openapi.json";
+
+/// Every operation in the OpenAPI document, as "METHOD /path".
+fn documented_operations(spec: &Value) -> Vec<String> {
+    let mut operations: Vec<String> = spec["paths"]
+        .as_object()
+        .expect("the document has paths")
+        .iter()
+        .flat_map(|(path, methods)| {
+            methods.as_object().unwrap().keys().map(move |method| format!("{} {path}", method.to_uppercase()))
+        })
+        .collect();
+    operations.sort();
+
+    operations
+}
+
+#[tokio::test]
+async fn the_openapi_document_lists_every_route() {
+    let (status, spec) = call(&api(), Method::GET, OPENAPI, None).await;
+    assert_eq!(status, StatusCode::OK);
+    assert!(spec["openapi"].as_str().unwrap().starts_with("3."), "{}", spec["openapi"]);
+
+    // A route added to the router but not to `docs::ApiDoc` fails here.
+    let mut expected = vec![
+        "GET /health",
+        "POST /create-compile-model",
+        "GET /models",
+        "GET /models/{id}",
+        "DELETE /models/{id}",
+        "POST /models/{id}/train",
+        "POST /train-with-column-scale",
+        "POST /models/{id}/predict",
+        "POST /models/{id}/evaluate",
+        "GET /models/{id}/weights",
+        "PUT /models/{id}/weights",
+        "GET /models/{id}/onnx",
+        "POST /utils/scale",
+    ];
+    expected.sort();
+    assert_eq!(documented_operations(&spec), expected);
+}
+
+#[tokio::test]
+async fn every_documented_route_is_served() {
+    let app = api();
+    let (_, spec) = call(&app, Method::GET, OPENAPI, None).await;
+
+    // And the other way round: a documented path the router does not have
+    // would fall through to the JSON 404 or the 405.
+    for operation in documented_operations(&spec) {
+        let (method, path) = operation.split_once(' ').unwrap();
+        let path = path.replace("{id}", "00000000-0000-4000-8000-000000000000");
+        let method: Method = method.parse().unwrap();
+        let body = matches!(method, Method::POST | Method::PUT).then(|| json!({}));
+
+        let (status, bytes) = call_raw(&app, method, &path, body).await;
+        let text = String::from_utf8_lossy(&bytes);
+
+        assert_ne!(status, StatusCode::METHOD_NOT_ALLOWED, "{operation} is documented but not routed");
+        assert!(!text.contains("no endpoint matches"), "{operation} is documented but not routed: {text}");
+    }
+}
+
+#[tokio::test]
+async fn the_examples_swagger_offers_are_accepted() {
+    let app = api();
+    let (_, spec) = call(&app, Method::GET, OPENAPI, None).await;
+    let example = |schema: &str| {
+        let value = spec["components"]["schemas"][schema]["example"].clone();
+        assert!(!value.is_null(), "{schema} has no example for Try it out");
+        value
+    };
+
+    // "Try it out" starts from these, so each one has to go through as it is.
+    let model = create(&app, example("CreateModelRequest")).await;
+    let id = id_of(&model);
+
+    for (endpoint, schema) in [("train", "TrainRequest"), ("predict", "PredictRequest"), ("evaluate", "EvaluateRequest")] {
+        let (status, answer) = call(&app, Method::POST, &format!("/models/{id}/{endpoint}"), Some(example(schema))).await;
+        assert_eq!(status, StatusCode::OK, "the {schema} example was refused: {answer}");
+    }
+
+    let mut scaled = example("ScaledTrainRequest");
+    scaled["model_id"] = json!(id);
+    let (status, answer) = call(&app, Method::POST, "/train-with-column-scale", Some(scaled)).await;
+    assert_eq!(status, StatusCode::OK, "the ScaledTrainRequest example was refused: {answer}");
+
+    let (status, answer) = call(&app, Method::POST, "/utils/scale", Some(example("ScaleRequest"))).await;
+    assert_eq!(status, StatusCode::OK, "the ScaleRequest example was refused: {answer}");
+
+    let mut onnx = &spec["paths"]["/models/{id}/onnx"]["get"]["responses"]["200"]["content"]["application/octet-stream"]["schema"];
+    if let Some(reference) = onnx["$ref"].as_str() {
+        onnx = &spec["components"]["schemas"][reference.rsplit('/').next().unwrap()];
+    }
+    assert_eq!(onnx["format"], "binary", "the ONNX export is a file, not an array: {onnx}");
+}
+
+#[tokio::test]
+async fn swagger_ui_is_served() {
+    let (status, bytes) = call_raw(&api(), Method::GET, "/swagger-ui/", None).await;
+
+    assert_eq!(status, StatusCode::OK);
+    assert!(String::from_utf8_lossy(&bytes).contains("Swagger UI"));
+}
+
+
+// ------------------------------------------------ training with column scale
+
+/// Floor area and rooms against a price: columns counted in thousands, units
+/// and hundreds of thousands, the case column scaling is for.
+fn house_prices() -> (Value, Value) {
+    (
+        json!([[1500., 3.], [2500., 4.], [1800., 3.], [3200., 5.]]),
+        json!([[250000.], [410000.], [300000.], [520000.]]),
+    )
+}
+
+/// A regression model; the same seed every time, so two of them start equal.
+async fn regression_model(app: &Router) -> String {
+    id_of(
+        &create(
+            app,
+            json!({
+                "features": 2,
+                "seed": 7,
+                "layers": [{ "units": 8, "activation": "relu" }, { "units": 1, "activation": "linear" }],
+                "loss": "mse",
+                "optimizer": { "type": "adam", "learning_rate": 0.01 }
+            }),
+        )
+        .await,
+    )
+}
+
+#[tokio::test]
+async fn training_with_column_scale_fits_the_scaled_data_and_reports_the_ratios() {
+    let app = api();
+    let (x, y) = house_prices();
+    let id = regression_model(&app).await;
+
+    let (status, run) = call(
+        &app,
+        Method::POST,
+        "/train-with-column-scale",
+        Some(json!({ "model_id": id, "x": x, "y": y, "epochs": 50, "return_history": false })),
+    )
+    .await;
+
+    assert_eq!(status, StatusCode::OK, "{run}");
+    // 1500 has four integer digits, 3 has one, 250000 has six.
+    assert_eq!(run["ten_power_ratios"], json!([3, 0, 5]));
+    assert_eq!(run["id"], json!(id));
+    assert_eq!(run["epochs"], 50);
+    assert_eq!(run["samples"], 4);
+    assert_eq!(run["trained_epochs"], 50);
+
+    // It is the same run as scaling through /utils/scale and training on the
+    // result, on an identical model: nothing more and nothing less happens.
+    let (_, scaled) = call(&app, Method::POST, "/utils/scale", Some(json!({ "x": x, "y": y }))).await;
+    let twin = regression_model(&app).await;
+    let (_, by_hand) = call(
+        &app,
+        Method::POST,
+        &format!("/models/{twin}/train"),
+        Some(json!({ "x": scaled["x"], "y": scaled["y"], "epochs": 50, "return_history": false })),
+    )
+    .await;
+    assert_eq!(run["final_loss"], by_hand["final_loss"], "scaling first and then training gave another run");
+    assert_eq!(run["ten_power_ratios"], scaled["ten_power_ratios"]);
+
+    // And not the run on raw prices, whose first squared error is around 1e11.
+    let raw = regression_model(&app).await;
+    let (_, unscaled) = call(
+        &app,
+        Method::POST,
+        &format!("/models/{raw}/train"),
+        Some(json!({ "x": x, "y": y, "epochs": 50, "return_history": false })),
+    )
+    .await;
+    assert!(unscaled["initial_loss"].as_f64().unwrap() > 1e9, "{unscaled}");
+    assert!(run["initial_loss"].as_f64().unwrap() < 100., "{run}");
+    assert!(unscaled.get("ten_power_ratios").is_none(), "a plain train reports no ratios: {unscaled}");
+
+    // The trained weights were stored like any other run's.
+    let (_, model) = call(&app, Method::GET, &format!("/models/{id}"), None).await;
+    assert_eq!(model["trained_epochs"], 50);
+}
+
+#[tokio::test]
+async fn training_with_column_scale_validates_before_it_scales() {
+    let app = api();
+    let (x, y) = house_prices();
+    let id = regression_model(&app).await;
+    let two_outputs = id_of(
+        &create(&app, json!({ "features": 2, "loss": "mse", "layers": [{ "units": 2, "activation": "linear" }] })).await,
+    );
+
+    let cases: Vec<(Value, StatusCode, &str)> = vec![
+        (json!({ "model_id": id, "x": [[1., 2., 3.]], "y": [[1.]] }), StatusCode::BAD_REQUEST, "takes 2 features"),
+        (json!({ "model_id": id, "x": x, "y": [[1.], [2.]] }), StatusCode::BAD_REQUEST, "samples"),
+        (
+            json!({ "model_id": two_outputs, "x": x, "y": [[1., 2.], [1., 2.], [1., 2.], [1., 2.]] }),
+            StatusCode::BAD_REQUEST,
+            "exactly 1 unit",
+        ),
+        (json!({ "model_id": "not-a-uuid", "x": x, "y": y }), StatusCode::BAD_REQUEST, "not a model id"),
+        (
+            json!({ "model_id": "00000000-0000-4000-8000-000000000000", "x": x, "y": y }),
+            StatusCode::NOT_FOUND,
+            "no model",
+        ),
+        (json!({ "x": x, "y": y }), StatusCode::UNPROCESSABLE_ENTITY, "model_id"),
+    ];
+
+    for (body, expected_status, expected) in cases {
+        let (status, error) = call(&app, Method::POST, "/train-with-column-scale", Some(body.clone())).await;
+        let message = error["error"]["message"].as_str().unwrap_or_default();
+
+        assert_eq!(status, expected_status, "{body} answered {error}");
+        assert!(message.contains(expected), "{body} answered '{message}', expected it to mention '{expected}'");
+        // Refused by the checks in front of neuralflow, not by a panic inside it.
+        assert_ne!(error["error"]["code"], "engine_error", "{body} reached the engine: {error}");
+    }
+
+    // None of the refused calls trained anything.
+    let (_, model) = call(&app, Method::GET, &format!("/models/{id}"), None).await;
+    assert_eq!(model["trained_epochs"], 0);
+}

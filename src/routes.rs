@@ -14,14 +14,17 @@ use axum::response::{IntoResponse, Response};
 use neuralflow::prelude::FitOptions;
 use uuid::Uuid;
 
+use crate::docs::OnnxFile;
 use crate::dto::*;
 use crate::engine;
-use crate::error::{ApiError, catch_engine_panic};
+use crate::error::{ApiError, ErrorResponse, catch_engine_panic};
 use crate::extract::ApiJson;
 use crate::model::{ModelSpec, NewModel, StoredModel};
 use crate::store::{AppState, now_ms};
 
 /// `GET /health`
+#[utoipa::path(get, path = "/health", tag = "server",
+    responses((status = 200, description = "The server is up", body = HealthResponse)))]
 pub async fn health(State(state): State<AppState>) -> Json<HealthResponse> {
     Json(HealthResponse {
         status: "ok",
@@ -33,6 +36,14 @@ pub async fn health(State(state): State<AppState>) -> Json<HealthResponse> {
 
 /// `POST /create-compile-model` -- Keras' `Sequential(...)` and `compile(...)`
 /// in one call, which is what the path is named after.
+#[utoipa::path(post, path = "/create-compile-model", tag = "models",
+    request_body = CreateModelRequest,
+    responses(
+        (status = 201, description = "The model, Keras' summary table included", body = ModelResponse),
+        (status = 400, description = "The values do not describe a valid model", body = ErrorResponse),
+        (status = 409, description = "NN_API_MAX_MODELS reached", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn create_model(
     State(state): State<AppState>,
     ApiJson(request): ApiJson<CreateModelRequest>,
@@ -53,6 +64,8 @@ pub async fn create_model(
 }
 
 /// `GET /models`
+#[utoipa::path(get, path = "/models", tag = "models",
+    responses((status = 200, description = "Every model, newest first", body = ModelListResponse)))]
 pub async fn list_models(State(state): State<AppState>) -> Json<ModelListResponse> {
     let models = state.list().await;
     let entries: Vec<ModelListEntry> = models.iter().map(ModelListEntry::from).collect();
@@ -61,6 +74,12 @@ pub async fn list_models(State(state): State<AppState>) -> Json<ModelListRespons
 }
 
 /// `GET /models/{id}`
+#[utoipa::path(get, path = "/models/{id}", tag = "models", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    responses(
+        (status = 200, description = "The model, Keras' summary table included", body = ModelResponse),
+        (status = 400, description = "The id is not a UUID", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+    ))]
 pub async fn get_model(State(state): State<AppState>, Path(id): Path<String>) -> Result<Json<ModelResponse>, ApiError> {
     let handle = state.handle(parse_id(&id)?)?;
     let model = handle.read().await.clone();
@@ -69,6 +88,12 @@ pub async fn get_model(State(state): State<AppState>, Path(id): Path<String>) ->
 }
 
 /// `DELETE /models/{id}`
+#[utoipa::path(delete, path = "/models/{id}", tag = "models", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    responses(
+        (status = 204, description = "Deleted; a training run already going finishes, but the id stops working at once"),
+        (status = 400, description = "The id is not a UUID", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+    ))]
 pub async fn delete_model(State(state): State<AppState>, Path(id): Path<String>) -> Result<StatusCode, ApiError> {
     state.remove(parse_id(&id)?)?;
 
@@ -76,13 +101,66 @@ pub async fn delete_model(State(state): State<AppState>, Path(id): Path<String>)
 }
 
 /// `POST /models/{id}/train` -- Keras' `fit`.
+#[utoipa::path(post, path = "/models/{id}/train", tag = "learning", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    request_body = TrainRequest,
+    responses(
+        (status = 200, description = "What the run did, and the values it used", body = TrainResponse),
+        (status = 400, description = "The id is not a UUID, or the values do not fit the model", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn train(
     State(state): State<AppState>,
     Path(id): Path<String>,
-    ApiJson(mut request): ApiJson<TrainRequest>,
+    ApiJson(request): ApiJson<TrainRequest>,
 ) -> Result<Json<TrainResponse>, ApiError> {
+    let (response, _) = run_training(&state, parse_id(&id)?, request, Scaling::None).await?;
+
+    Ok(Json(response))
+}
+
+/// `POST /train-with-column-scale` -- `train`, with x and y passed through
+/// `column_based_scaling` first. The request is validated exactly as a train
+/// request is before anything is scaled, and the answer adds the power of ten
+/// each column was divided by.
+#[utoipa::path(post, path = "/train-with-column-scale", tag = "learning",
+    request_body = ScaledTrainRequest,
+    responses(
+        (status = 200, description = "What the run did, the values it used, and the power of ten each column was divided by", body = ScaledTrainResponse),
+        (status = 400, description = "The model id is not a UUID, the values do not fit the model, or its last layer has more than one unit", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
+pub async fn train_with_column_scale(
+    State(state): State<AppState>,
+    ApiJson(request): ApiJson<ScaledTrainRequest>,
+) -> Result<Json<ScaledTrainResponse>, ApiError> {
+    let (model_id, request) = request.into_parts();
+    let (training, ten_power_ratios) = run_training(&state, parse_id(&model_id)?, request, Scaling::Columns).await?;
+    let ten_power_ratios = ten_power_ratios.expect("a run with column scaling reports the ratios it used");
+
+    Ok(Json(ScaledTrainResponse { training, ten_power_ratios }))
+}
+
+/// What a training run does to x and y before `fit` sees them.
+#[derive(Debug, Clone, Copy)]
+enum Scaling {
+    /// Nothing: they are trained on as they arrived.
+    None,
+    /// `column_based_scaling`, after they have been validated.
+    Columns,
+}
+
+/// One training run, whichever endpoint asked for it: validate, scale if asked
+/// to, fit, store the weights. Returns the answer and, for a scaled run, the
+/// power of ten each column was divided by.
+async fn run_training(
+    state: &AppState,
+    id: Uuid,
+    mut request: TrainRequest,
+    scaling: Scaling,
+) -> Result<(TrainResponse, Option<Vec<usize>>), ApiError> {
     let limits = state.config().limits;
-    let id = parse_id(&id)?;
     let handle = state.handle(id)?;
     // Taken before anything is read, and held to the end: one run at a time on
     // this model. It locks nothing else -- reads of the model stay open.
@@ -117,6 +195,15 @@ pub async fn train(
         let model = handle.read().await;
         validate_samples(&model.spec, &x_rows, &y_rows, &limits)?;
 
+        // `column_based_scaling` takes y as a single column and panics on any
+        // other, so the model it trains has to answer with one value.
+        if matches!(scaling, Scaling::Columns) && model.spec.output_units() != 1 {
+            return Err(ApiError::bad_request(format!(
+                "column scaling needs a model whose last layer has exactly 1 unit, because it scales 'y' as a single column; this model's has {}",
+                model.spec.output_units()
+            )));
+        }
+
         // The request's batch size wins for this run; the model's default is
         // what a request that sends none gets.
         let batch_size = request.batch_size.unwrap_or(model.batch_size);
@@ -150,7 +237,17 @@ pub async fn train(
     let options = FitOptions { epochs: request.epochs, batch_size, shuffle: request.shuffle, verbose: false };
 
     let started = Instant::now();
-    let outcome = run_blocking(move || catch_engine_panic(|| engine::train(&run_spec, &weights, &x, &y, options))).await?;
+    // Only now, with every check above passed, is anything scaled.
+    let (outcome, ten_power_ratios) = run_blocking(move || {
+        catch_engine_panic(|| match scaling {
+            Scaling::None => (engine::train(&run_spec, &weights, &x, &y, options), None),
+            Scaling::Columns => {
+                let (outcome, ratios) = engine::train_with_column_scale(&run_spec, &weights, x, y, options);
+                (outcome, Some(ratios))
+            }
+        })
+    })
+    .await?;
     let duration_ms = started.elapsed().as_millis() as u64;
 
     let loss_history = outcome.loss_history;
@@ -173,7 +270,7 @@ pub async fn train(
         model.trained_epochs
     };
 
-    Ok(Json(TrainResponse {
+    let response = TrainResponse {
         id,
         epochs: request.epochs,
         batch_size,
@@ -185,10 +282,20 @@ pub async fn train(
         loss: request.return_history.then_some(loss_history),
         trained_epochs,
         duration_ms,
-    }))
+    };
+
+    Ok((response, ten_power_ratios))
 }
 
 /// `POST /models/{id}/predict` -- Keras' `predict`.
+#[utoipa::path(post, path = "/models/{id}/predict", tag = "learning", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    request_body = PredictRequest,
+    responses(
+        (status = 200, description = "One row of predictions per sample", body = PredictResponse),
+        (status = 400, description = "The id is not a UUID, or the values do not fit the model", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn predict(
     State(state): State<AppState>,
     Path(id): Path<String>,
@@ -223,6 +330,14 @@ pub async fn predict(
 }
 
 /// `POST /models/{id}/evaluate` -- Keras' `evaluate`.
+#[utoipa::path(post, path = "/models/{id}/evaluate", tag = "learning", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    request_body = EvaluateRequest,
+    responses(
+        (status = 200, description = "The loss on these samples; the model is not changed", body = EvaluateResponse),
+        (status = 400, description = "The id is not a UUID, or the values do not fit the model", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn evaluate(
     State(state): State<AppState>,
     Path(id): Path<String>,
@@ -271,6 +386,12 @@ pub async fn evaluate(
 }
 
 /// `GET /models/{id}/weights` -- Keras' `get_weights`.
+#[utoipa::path(get, path = "/models/{id}/weights", tag = "weights", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    responses(
+        (status = 200, description = "Every layer's W and b", body = WeightsResponse),
+        (status = 400, description = "The id is not a UUID", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+    ))]
 pub async fn get_weights(State(state): State<AppState>, Path(id): Path<String>) -> Result<Json<WeightsResponse>, ApiError> {
     let handle = state.handle(parse_id(&id)?)?;
     let model = handle.read().await;
@@ -280,6 +401,14 @@ pub async fn get_weights(State(state): State<AppState>, Path(id): Path<String>) 
 
 /// `PUT /models/{id}/weights` -- Keras' `set_weights`. Layers left out of the
 /// request keep the weights they have.
+#[utoipa::path(put, path = "/models/{id}/weights", tag = "weights", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    request_body = SetWeightsRequest,
+    responses(
+        (status = 200, description = "Every layer's weights after the change", body = WeightsResponse),
+        (status = 400, description = "A layer name or a weight shape does not fit the model", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn set_weights(
     State(state): State<AppState>,
     Path(id): Path<String>,
@@ -303,6 +432,12 @@ pub async fn set_weights(
 
 /// `GET /models/{id}/onnx` -- the model as an ONNX file. The one endpoint that
 /// answers with bytes rather than JSON.
+#[utoipa::path(get, path = "/models/{id}/onnx", tag = "weights", params(("id" = Uuid, Path, description = "The model id `POST /create-compile-model` returned")),
+    responses(
+        (status = 200, description = "The model as an ONNX file", content_type = "application/octet-stream", body = OnnxFile),
+        (status = 400, description = "The id is not a UUID", body = ErrorResponse),
+        (status = 404, description = "No model with that id", body = ErrorResponse),
+    ))]
 pub async fn export_onnx(State(state): State<AppState>, Path(id): Path<String>) -> Result<Response, ApiError> {
     let handle = state.handle(parse_id(&id)?)?;
     let (name, spec, weights) = {
@@ -324,6 +459,13 @@ pub async fn export_onnx(State(state): State<AppState>, Path(id): Path<String>) 
 
 /// `POST /utils/scale` -- `column_based_scaling`, which divides every column
 /// by a power of ten taken from that column's first row.
+#[utoipa::path(post, path = "/utils/scale", tag = "utils",
+    request_body = ScaleRequest,
+    responses(
+        (status = 200, description = "The scaled columns and the power of ten each was divided by", body = ScaleResponse),
+        (status = 400, description = "The rows do not line up, or y has more than one column", body = ErrorResponse),
+        (status = 422, description = "The JSON does not fit the request type, or neuralflow refused the values", body = ErrorResponse),
+    ))]
 pub async fn scale(State(state): State<AppState>, ApiJson(request): ApiJson<ScaleRequest>) -> Result<Json<ScaleResponse>, ApiError> {
     let limits = state.config().limits;
     if request.x.is_empty() {
@@ -351,7 +493,7 @@ pub async fn scale(State(state): State<AppState>, ApiJson(request): ApiJson<Scal
 
 /// Anything else, still as JSON.
 pub async fn not_found() -> ApiError {
-    ApiError::not_found("no endpoint matches this path; the README lists the routes, and GET /health says whether the server is up")
+    ApiError::not_found("no endpoint matches this path; every route is listed at /swagger-ui/")
 }
 
 /// The full `ModelResponse`, summary table included, which means building the

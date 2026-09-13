@@ -114,6 +114,24 @@ pub fn train(spec: &ModelSpec, weights: &[LayerWeights], x: &Matrix, y: &Matrix,
     TrainOutcome { loss_history: history.loss, weights: weights_of(&model) }
 }
 
+/// `column_based_scaling` on x and y, then `fit` on what it produced.
+///
+/// Returns the run and the power of ten every column was divided by, x's
+/// columns first and y's last. Scaling draws nothing from the random generator,
+/// so a seeded run is as repeatable as an unscaled one.
+pub fn train_with_column_scale(
+    spec: &ModelSpec,
+    weights: &[LayerWeights],
+    x: Matrix,
+    y: Matrix,
+    options: FitOptions,
+) -> (TrainOutcome, Vec<usize>) {
+    let (scaled_x, scaled_y, ten_power_ratios) =
+        neuralflow::column_based_scaling::manipulate_datas_between_0_and_10(x, y);
+
+    (train(spec, weights, &scaled_x, &scaled_y, options), ten_power_ratios)
+}
+
 /// Keras' `predict(x)`.
 pub fn predict(spec: &ModelSpec, weights: &[LayerWeights], x: &Matrix) -> Vec<Vec<f64>> {
     rows_of(&build(spec, weights).predict(x))

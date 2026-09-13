@@ -9,10 +9,11 @@
 
 use neuralflow::prelude::Activation;
 use serde::{Deserialize, Serialize};
+use utoipa::ToSchema;
 use uuid::Uuid;
 
 /// Keras' activations, as the JSON names the client sends.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum ActivationKind {
     #[serde(alias = "ReLU", alias = "RELU", alias = "ReLu")]
@@ -34,7 +35,7 @@ impl From<ActivationKind> for Activation {
 }
 
 /// The losses neuralflow implements.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum LossKind {
     #[serde(alias = "bce", alias = "BinaryCrossentropy", alias = "binary_cross_entropy")]
@@ -44,7 +45,7 @@ pub enum LossKind {
 }
 
 /// The optimizers neuralflow implements.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, ToSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum OptimizerKind {
     #[serde(alias = "SGD", alias = "gradient_descent")]
@@ -66,7 +67,7 @@ impl OptimizerKind {
 }
 
 /// An optimizer with its learning rate resolved.
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize, ToSchema)]
 pub struct OptimizerConfig {
     #[serde(rename = "type")]
     pub kind: OptimizerKind,
@@ -127,7 +128,8 @@ impl ModelSpec {
 
 /// Keras' `get_weights()` for one layer: W as rows of the input, b as one
 /// value per unit.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, ToSchema)]
+#[schema(example = json!({ "name": "layer2", "weights": [[1.0], [0.0]], "bias": [0.5] }))]
 pub struct LayerWeights {
     pub name: String,
     /// `input_count` rows of `units` values each.
