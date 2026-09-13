@@ -1,0 +1,2642 @@
+[
+  {
+    "id": 1,
+    "yas": 25,
+    "aylik_gelir": 39181,
+    "kredi_skoru": 1346,
+    "borc_gelir_orani": 0.272,
+    "onay": 1
+  },
+  {
+    "id": 2,
+    "yas": 55,
+    "aylik_gelir": 14891,
+    "kredi_skoru": 1452,
+    "borc_gelir_orani": 0.15,
+    "onay": 1
+  },
+  {
+    "id": 3,
+    "yas": 50,
+    "aylik_gelir": 29598,
+    "kredi_skoru": 1061,
+    "borc_gelir_orani": 0.613,
+    "onay": 0
+  },
+  {
+    "id": 4,
+    "yas": 40,
+    "aylik_gelir": 11990,
+    "kredi_skoru": 658,
+    "borc_gelir_orani": 0.734,
+    "onay": 0
+  },
+  {
+    "id": 5,
+    "yas": 40,
+    "aylik_gelir": 27374,
+    "kredi_skoru": 1438,
+    "borc_gelir_orani": 0.074,
+    "onay": 1
+  },
+  {
+    "id": 6,
+    "yas": 59,
+    "aylik_gelir": 26886,
+    "kredi_skoru": 1278,
+    "borc_gelir_orani": 0.349,
+    "onay": 1
+  },
+  {
+    "id": 7,
+    "yas": 24,
+    "aylik_gelir": 13844,
+    "kredi_skoru": 1214,
+    "borc_gelir_orani": 0.573,
+    "onay": 0
+  },
+  {
+    "id": 8,
+    "yas": 52,
+    "aylik_gelir": 20410,
+    "kredi_skoru": 943,
+    "borc_gelir_orani": 0.358,
+    "onay": 0
+  },
+  {
+    "id": 9,
+    "yas": 30,
+    "aylik_gelir": 11890,
+    "kredi_skoru": 940,
+    "borc_gelir_orani": 0.498,
+    "onay": 0
+  },
+  {
+    "id": 10,
+    "yas": 25,
+    "aylik_gelir": 18377,
+    "kredi_skoru": 1289,
+    "borc_gelir_orani": 0.273,
+    "onay": 1
+  },
+  {
+    "id": 11,
+    "yas": 44,
+    "aylik_gelir": 15389,
+    "kredi_skoru": 1280,
+    "borc_gelir_orani": 0.098,
+    "onay": 1
+  },
+  {
+    "id": 12,
+    "yas": 64,
+    "aylik_gelir": 13830,
+    "kredi_skoru": 1098,
+    "borc_gelir_orani": 0.051,
+    "onay": 0
+  },
+  {
+    "id": 13,
+    "yas": 54,
+    "aylik_gelir": 11981,
+    "kredi_skoru": 1153,
+    "borc_gelir_orani": 0.359,
+    "onay": 0
+  },
+  {
+    "id": 14,
+    "yas": 55,
+    "aylik_gelir": 23290,
+    "kredi_skoru": 1282,
+    "borc_gelir_orani": 0.257,
+    "onay": 1
+  },
+  {
+    "id": 15,
+    "yas": 53,
+    "aylik_gelir": 42818,
+    "kredi_skoru": 1197,
+    "borc_gelir_orani": 0.323,
+    "onay": 1
+  },
+  {
+    "id": 16,
+    "yas": 56,
+    "aylik_gelir": 23438,
+    "kredi_skoru": 1148,
+    "borc_gelir_orani": 0.358,
+    "onay": 0
+  },
+  {
+    "id": 17,
+    "yas": 44,
+    "aylik_gelir": 17903,
+    "kredi_skoru": 1202,
+    "borc_gelir_orani": 0.138,
+    "onay": 1
+  },
+  {
+    "id": 18,
+    "yas": 26,
+    "aylik_gelir": 17305,
+    "kredi_skoru": 1418,
+    "borc_gelir_orani": 0.273,
+    "onay": 1
+  },
+  {
+    "id": 19,
+    "yas": 58,
+    "aylik_gelir": 40208,
+    "kredi_skoru": 916,
+    "borc_gelir_orani": 0.461,
+    "onay": 0
+  },
+  {
+    "id": 20,
+    "yas": 41,
+    "aylik_gelir": 20108,
+    "kredi_skoru": 835,
+    "borc_gelir_orani": 0.585,
+    "onay": 0
+  },
+  {
+    "id": 21,
+    "yas": 43,
+    "aylik_gelir": 15510,
+    "kredi_skoru": 1122,
+    "borc_gelir_orani": 0.313,
+    "onay": 1
+  },
+  {
+    "id": 22,
+    "yas": 37,
+    "aylik_gelir": 28566,
+    "kredi_skoru": 1149,
+    "borc_gelir_orani": 0.544,
+    "onay": 0
+  },
+  {
+    "id": 23,
+    "yas": 29,
+    "aylik_gelir": 19131,
+    "kredi_skoru": 947,
+    "borc_gelir_orani": 0.188,
+    "onay": 0
+  },
+  {
+    "id": 24,
+    "yas": 62,
+    "aylik_gelir": 46780,
+    "kredi_skoru": 1106,
+    "borc_gelir_orani": 0.107,
+    "onay": 1
+  },
+  {
+    "id": 25,
+    "yas": 56,
+    "aylik_gelir": 23685,
+    "kredi_skoru": 953,
+    "borc_gelir_orani": 0.057,
+    "onay": 1
+  },
+  {
+    "id": 26,
+    "yas": 49,
+    "aylik_gelir": 11558,
+    "kredi_skoru": 1082,
+    "borc_gelir_orani": 0.361,
+    "onay": 0
+  },
+  {
+    "id": 27,
+    "yas": 39,
+    "aylik_gelir": 9609,
+    "kredi_skoru": 990,
+    "borc_gelir_orani": 0.189,
+    "onay": 0
+  },
+  {
+    "id": 28,
+    "yas": 58,
+    "aylik_gelir": 46960,
+    "kredi_skoru": 1169,
+    "borc_gelir_orani": 0.256,
+    "onay": 1
+  },
+  {
+    "id": 29,
+    "yas": 45,
+    "aylik_gelir": 41514,
+    "kredi_skoru": 1423,
+    "borc_gelir_orani": 0.143,
+    "onay": 1
+  },
+  {
+    "id": 30,
+    "yas": 40,
+    "aylik_gelir": 16603,
+    "kredi_skoru": 1150,
+    "borc_gelir_orani": 0.108,
+    "onay": 1
+  },
+  {
+    "id": 31,
+    "yas": 41,
+    "aylik_gelir": 15332,
+    "kredi_skoru": 1289,
+    "borc_gelir_orani": 0.13,
+    "onay": 1
+  },
+  {
+    "id": 32,
+    "yas": 31,
+    "aylik_gelir": 31188,
+    "kredi_skoru": 982,
+    "borc_gelir_orani": 0.489,
+    "onay": 0
+  },
+  {
+    "id": 33,
+    "yas": 25,
+    "aylik_gelir": 9136,
+    "kredi_skoru": 1305,
+    "borc_gelir_orani": 0.198,
+    "onay": 0
+  },
+  {
+    "id": 34,
+    "yas": 45,
+    "aylik_gelir": 12778,
+    "kredi_skoru": 1125,
+    "borc_gelir_orani": 0.418,
+    "onay": 1
+  },
+  {
+    "id": 35,
+    "yas": 60,
+    "aylik_gelir": 30565,
+    "kredi_skoru": 1200,
+    "borc_gelir_orani": 0.074,
+    "onay": 1
+  },
+  {
+    "id": 36,
+    "yas": 23,
+    "aylik_gelir": 12290,
+    "kredi_skoru": 1124,
+    "borc_gelir_orani": 0.252,
+    "onay": 0
+  },
+  {
+    "id": 37,
+    "yas": 59,
+    "aylik_gelir": 22557,
+    "kredi_skoru": 1397,
+    "borc_gelir_orani": 0.211,
+    "onay": 1
+  },
+  {
+    "id": 38,
+    "yas": 58,
+    "aylik_gelir": 20756,
+    "kredi_skoru": 1396,
+    "borc_gelir_orani": 0.038,
+    "onay": 1
+  },
+  {
+    "id": 39,
+    "yas": 33,
+    "aylik_gelir": 19265,
+    "kredi_skoru": 964,
+    "borc_gelir_orani": 0.189,
+    "onay": 0
+  },
+  {
+    "id": 40,
+    "yas": 49,
+    "aylik_gelir": 37778,
+    "kredi_skoru": 1442,
+    "borc_gelir_orani": 0.1,
+    "onay": 1
+  },
+  {
+    "id": 41,
+    "yas": 28,
+    "aylik_gelir": 16234,
+    "kredi_skoru": 863,
+    "borc_gelir_orani": 0.403,
+    "onay": 0
+  },
+  {
+    "id": 42,
+    "yas": 55,
+    "aylik_gelir": 28793,
+    "kredi_skoru": 1275,
+    "borc_gelir_orani": 0.502,
+    "onay": 1
+  },
+  {
+    "id": 43,
+    "yas": 52,
+    "aylik_gelir": 8263,
+    "kredi_skoru": 991,
+    "borc_gelir_orani": 0.734,
+    "onay": 0
+  },
+  {
+    "id": 44,
+    "yas": 36,
+    "aylik_gelir": 16784,
+    "kredi_skoru": 1284,
+    "borc_gelir_orani": 0.158,
+    "onay": 1
+  },
+  {
+    "id": 45,
+    "yas": 24,
+    "aylik_gelir": 10165,
+    "kredi_skoru": 1289,
+    "borc_gelir_orani": 0.092,
+    "onay": 1
+  },
+  {
+    "id": 46,
+    "yas": 64,
+    "aylik_gelir": 13872,
+    "kredi_skoru": 937,
+    "borc_gelir_orani": 0.515,
+    "onay": 0
+  },
+  {
+    "id": 47,
+    "yas": 41,
+    "aylik_gelir": 12271,
+    "kredi_skoru": 1298,
+    "borc_gelir_orani": 0.221,
+    "onay": 1
+  },
+  {
+    "id": 48,
+    "yas": 61,
+    "aylik_gelir": 19926,
+    "kredi_skoru": 1091,
+    "borc_gelir_orani": 0.275,
+    "onay": 1
+  },
+  {
+    "id": 49,
+    "yas": 51,
+    "aylik_gelir": 31017,
+    "kredi_skoru": 1031,
+    "borc_gelir_orani": 0.555,
+    "onay": 0
+  },
+  {
+    "id": 50,
+    "yas": 56,
+    "aylik_gelir": 12007,
+    "kredi_skoru": 1150,
+    "borc_gelir_orani": 0.481,
+    "onay": 0
+  },
+  {
+    "id": 51,
+    "yas": 55,
+    "aylik_gelir": 21849,
+    "kredi_skoru": 1076,
+    "borc_gelir_orani": 0.253,
+    "onay": 1
+  },
+  {
+    "id": 52,
+    "yas": 29,
+    "aylik_gelir": 12686,
+    "kredi_skoru": 916,
+    "borc_gelir_orani": 0.436,
+    "onay": 0
+  },
+  {
+    "id": 53,
+    "yas": 37,
+    "aylik_gelir": 14983,
+    "kredi_skoru": 1053,
+    "borc_gelir_orani": 0.099,
+    "onay": 0
+  },
+  {
+    "id": 54,
+    "yas": 42,
+    "aylik_gelir": 28951,
+    "kredi_skoru": 1117,
+    "borc_gelir_orani": 0.091,
+    "onay": 1
+  },
+  {
+    "id": 55,
+    "yas": 43,
+    "aylik_gelir": 23772,
+    "kredi_skoru": 914,
+    "borc_gelir_orani": 0.166,
+    "onay": 0
+  },
+  {
+    "id": 56,
+    "yas": 22,
+    "aylik_gelir": 26475,
+    "kredi_skoru": 1210,
+    "borc_gelir_orani": 0.411,
+    "onay": 0
+  },
+  {
+    "id": 57,
+    "yas": 45,
+    "aylik_gelir": 17829,
+    "kredi_skoru": 1355,
+    "borc_gelir_orani": 0.45,
+    "onay": 1
+  },
+  {
+    "id": 58,
+    "yas": 27,
+    "aylik_gelir": 11259,
+    "kredi_skoru": 1416,
+    "borc_gelir_orani": 0.241,
+    "onay": 0
+  },
+  {
+    "id": 59,
+    "yas": 54,
+    "aylik_gelir": 19252,
+    "kredi_skoru": 1026,
+    "borc_gelir_orani": 0.042,
+    "onay": 1
+  },
+  {
+    "id": 60,
+    "yas": 51,
+    "aylik_gelir": 22908,
+    "kredi_skoru": 1148,
+    "borc_gelir_orani": 0.485,
+    "onay": 1
+  },
+  {
+    "id": 61,
+    "yas": 62,
+    "aylik_gelir": 25377,
+    "kredi_skoru": 1404,
+    "borc_gelir_orani": 0.308,
+    "onay": 1
+  },
+  {
+    "id": 62,
+    "yas": 54,
+    "aylik_gelir": 13071,
+    "kredi_skoru": 1067,
+    "borc_gelir_orani": 0.262,
+    "onay": 0
+  },
+  {
+    "id": 63,
+    "yas": 37,
+    "aylik_gelir": 18085,
+    "kredi_skoru": 1330,
+    "borc_gelir_orani": 0.048,
+    "onay": 0
+  },
+  {
+    "id": 64,
+    "yas": 64,
+    "aylik_gelir": 26604,
+    "kredi_skoru": 913,
+    "borc_gelir_orani": 0.132,
+    "onay": 1
+  },
+  {
+    "id": 65,
+    "yas": 39,
+    "aylik_gelir": 55215,
+    "kredi_skoru": 1045,
+    "borc_gelir_orani": 0.63,
+    "onay": 1
+  },
+  {
+    "id": 66,
+    "yas": 35,
+    "aylik_gelir": 39447,
+    "kredi_skoru": 918,
+    "borc_gelir_orani": 0.413,
+    "onay": 0
+  },
+  {
+    "id": 67,
+    "yas": 61,
+    "aylik_gelir": 15775,
+    "kredi_skoru": 884,
+    "borc_gelir_orani": 0.702,
+    "onay": 0
+  },
+  {
+    "id": 68,
+    "yas": 37,
+    "aylik_gelir": 15257,
+    "kredi_skoru": 865,
+    "borc_gelir_orani": 0.275,
+    "onay": 0
+  },
+  {
+    "id": 69,
+    "yas": 24,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 1155,
+    "borc_gelir_orani": 0.375,
+    "onay": 0
+  },
+  {
+    "id": 70,
+    "yas": 42,
+    "aylik_gelir": 14134,
+    "kredi_skoru": 1193,
+    "borc_gelir_orani": 0.467,
+    "onay": 0
+  },
+  {
+    "id": 71,
+    "yas": 56,
+    "aylik_gelir": 25138,
+    "kredi_skoru": 845,
+    "borc_gelir_orani": 0.539,
+    "onay": 0
+  },
+  {
+    "id": 72,
+    "yas": 29,
+    "aylik_gelir": 27140,
+    "kredi_skoru": 866,
+    "borc_gelir_orani": 0.424,
+    "onay": 0
+  },
+  {
+    "id": 73,
+    "yas": 41,
+    "aylik_gelir": 13122,
+    "kredi_skoru": 731,
+    "borc_gelir_orani": 0.305,
+    "onay": 0
+  },
+  {
+    "id": 74,
+    "yas": 26,
+    "aylik_gelir": 11336,
+    "kredi_skoru": 874,
+    "borc_gelir_orani": 0.58,
+    "onay": 0
+  },
+  {
+    "id": 75,
+    "yas": 51,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 915,
+    "borc_gelir_orani": 0.429,
+    "onay": 0
+  },
+  {
+    "id": 76,
+    "yas": 42,
+    "aylik_gelir": 17136,
+    "kredi_skoru": 964,
+    "borc_gelir_orani": 0.143,
+    "onay": 0
+  },
+  {
+    "id": 77,
+    "yas": 35,
+    "aylik_gelir": 10510,
+    "kredi_skoru": 1381,
+    "borc_gelir_orani": 0.039,
+    "onay": 1
+  },
+  {
+    "id": 78,
+    "yas": 31,
+    "aylik_gelir": 12732,
+    "kredi_skoru": 848,
+    "borc_gelir_orani": 0.576,
+    "onay": 0
+  },
+  {
+    "id": 79,
+    "yas": 46,
+    "aylik_gelir": 13037,
+    "kredi_skoru": 977,
+    "borc_gelir_orani": 0.232,
+    "onay": 0
+  },
+  {
+    "id": 80,
+    "yas": 51,
+    "aylik_gelir": 19687,
+    "kredi_skoru": 1039,
+    "borc_gelir_orani": 0.3,
+    "onay": 0
+  },
+  {
+    "id": 81,
+    "yas": 63,
+    "aylik_gelir": 10755,
+    "kredi_skoru": 1355,
+    "borc_gelir_orani": 0.235,
+    "onay": 1
+  },
+  {
+    "id": 82,
+    "yas": 40,
+    "aylik_gelir": 9302,
+    "kredi_skoru": 1276,
+    "borc_gelir_orani": 0.223,
+    "onay": 1
+  },
+  {
+    "id": 83,
+    "yas": 28,
+    "aylik_gelir": 40631,
+    "kredi_skoru": 1104,
+    "borc_gelir_orani": 0.391,
+    "onay": 1
+  },
+  {
+    "id": 84,
+    "yas": 58,
+    "aylik_gelir": 12516,
+    "kredi_skoru": 1248,
+    "borc_gelir_orani": 0.278,
+    "onay": 1
+  },
+  {
+    "id": 85,
+    "yas": 49,
+    "aylik_gelir": 12241,
+    "kredi_skoru": 984,
+    "borc_gelir_orani": 0.197,
+    "onay": 0
+  },
+  {
+    "id": 86,
+    "yas": 52,
+    "aylik_gelir": 47512,
+    "kredi_skoru": 1071,
+    "borc_gelir_orani": 0.505,
+    "onay": 1
+  },
+  {
+    "id": 87,
+    "yas": 25,
+    "aylik_gelir": 55570,
+    "kredi_skoru": 1328,
+    "borc_gelir_orani": 0.197,
+    "onay": 1
+  },
+  {
+    "id": 88,
+    "yas": 35,
+    "aylik_gelir": 10006,
+    "kredi_skoru": 974,
+    "borc_gelir_orani": 0.38,
+    "onay": 0
+  },
+  {
+    "id": 89,
+    "yas": 55,
+    "aylik_gelir": 18259,
+    "kredi_skoru": 1033,
+    "borc_gelir_orani": 0.558,
+    "onay": 0
+  },
+  {
+    "id": 90,
+    "yas": 58,
+    "aylik_gelir": 26051,
+    "kredi_skoru": 645,
+    "borc_gelir_orani": 0.828,
+    "onay": 0
+  },
+  {
+    "id": 91,
+    "yas": 40,
+    "aylik_gelir": 39185,
+    "kredi_skoru": 1373,
+    "borc_gelir_orani": 0.167,
+    "onay": 1
+  },
+  {
+    "id": 92,
+    "yas": 57,
+    "aylik_gelir": 14158,
+    "kredi_skoru": 1223,
+    "borc_gelir_orani": 0.302,
+    "onay": 0
+  },
+  {
+    "id": 93,
+    "yas": 58,
+    "aylik_gelir": 20005,
+    "kredi_skoru": 723,
+    "borc_gelir_orani": 0.146,
+    "onay": 0
+  },
+  {
+    "id": 94,
+    "yas": 38,
+    "aylik_gelir": 24933,
+    "kredi_skoru": 1358,
+    "borc_gelir_orani": 0.312,
+    "onay": 1
+  },
+  {
+    "id": 95,
+    "yas": 61,
+    "aylik_gelir": 28163,
+    "kredi_skoru": 697,
+    "borc_gelir_orani": 0.178,
+    "onay": 0
+  },
+  {
+    "id": 96,
+    "yas": 33,
+    "aylik_gelir": 13973,
+    "kredi_skoru": 741,
+    "borc_gelir_orani": 0.69,
+    "onay": 0
+  },
+  {
+    "id": 97,
+    "yas": 31,
+    "aylik_gelir": 15213,
+    "kredi_skoru": 1314,
+    "borc_gelir_orani": 0.298,
+    "onay": 1
+  },
+  {
+    "id": 98,
+    "yas": 51,
+    "aylik_gelir": 11064,
+    "kredi_skoru": 942,
+    "borc_gelir_orani": 0.469,
+    "onay": 0
+  },
+  {
+    "id": 99,
+    "yas": 49,
+    "aylik_gelir": 18015,
+    "kredi_skoru": 1025,
+    "borc_gelir_orani": 0.08,
+    "onay": 1
+  },
+  {
+    "id": 100,
+    "yas": 27,
+    "aylik_gelir": 13660,
+    "kredi_skoru": 1004,
+    "borc_gelir_orani": 0.191,
+    "onay": 1
+  },
+  {
+    "id": 101,
+    "yas": 58,
+    "aylik_gelir": 24800,
+    "kredi_skoru": 1332,
+    "borc_gelir_orani": 0.307,
+    "onay": 1
+  },
+  {
+    "id": 102,
+    "yas": 29,
+    "aylik_gelir": 12286,
+    "kredi_skoru": 755,
+    "borc_gelir_orani": 0.328,
+    "onay": 0
+  },
+  {
+    "id": 103,
+    "yas": 57,
+    "aylik_gelir": 27291,
+    "kredi_skoru": 1340,
+    "borc_gelir_orani": 0.331,
+    "onay": 1
+  },
+  {
+    "id": 104,
+    "yas": 21,
+    "aylik_gelir": 22603,
+    "kredi_skoru": 1174,
+    "borc_gelir_orani": 0.247,
+    "onay": 1
+  },
+  {
+    "id": 105,
+    "yas": 56,
+    "aylik_gelir": 23390,
+    "kredi_skoru": 1046,
+    "borc_gelir_orani": 0.14,
+    "onay": 1
+  },
+  {
+    "id": 106,
+    "yas": 56,
+    "aylik_gelir": 25551,
+    "kredi_skoru": 1044,
+    "borc_gelir_orani": 0.307,
+    "onay": 1
+  },
+  {
+    "id": 107,
+    "yas": 56,
+    "aylik_gelir": 22338,
+    "kredi_skoru": 783,
+    "borc_gelir_orani": 0.557,
+    "onay": 0
+  },
+  {
+    "id": 108,
+    "yas": 50,
+    "aylik_gelir": 20296,
+    "kredi_skoru": 1278,
+    "borc_gelir_orani": 0.327,
+    "onay": 1
+  },
+  {
+    "id": 109,
+    "yas": 42,
+    "aylik_gelir": 13325,
+    "kredi_skoru": 1266,
+    "borc_gelir_orani": 0.284,
+    "onay": 1
+  },
+  {
+    "id": 110,
+    "yas": 52,
+    "aylik_gelir": 23970,
+    "kredi_skoru": 913,
+    "borc_gelir_orani": 0.197,
+    "onay": 0
+  },
+  {
+    "id": 111,
+    "yas": 33,
+    "aylik_gelir": 15841,
+    "kredi_skoru": 923,
+    "borc_gelir_orani": 0.492,
+    "onay": 0
+  },
+  {
+    "id": 112,
+    "yas": 56,
+    "aylik_gelir": 55941,
+    "kredi_skoru": 989,
+    "borc_gelir_orani": 0.422,
+    "onay": 0
+  },
+  {
+    "id": 113,
+    "yas": 46,
+    "aylik_gelir": 39267,
+    "kredi_skoru": 1393,
+    "borc_gelir_orani": 0.34,
+    "onay": 1
+  },
+  {
+    "id": 114,
+    "yas": 41,
+    "aylik_gelir": 21672,
+    "kredi_skoru": 897,
+    "borc_gelir_orani": 0.306,
+    "onay": 0
+  },
+  {
+    "id": 115,
+    "yas": 43,
+    "aylik_gelir": 13237,
+    "kredi_skoru": 1585,
+    "borc_gelir_orani": 0.052,
+    "onay": 1
+  },
+  {
+    "id": 116,
+    "yas": 46,
+    "aylik_gelir": 11726,
+    "kredi_skoru": 1171,
+    "borc_gelir_orani": 0.217,
+    "onay": 1
+  },
+  {
+    "id": 117,
+    "yas": 22,
+    "aylik_gelir": 24789,
+    "kredi_skoru": 1034,
+    "borc_gelir_orani": 0.17,
+    "onay": 1
+  },
+  {
+    "id": 118,
+    "yas": 27,
+    "aylik_gelir": 17333,
+    "kredi_skoru": 1122,
+    "borc_gelir_orani": 0.142,
+    "onay": 1
+  },
+  {
+    "id": 119,
+    "yas": 32,
+    "aylik_gelir": 20296,
+    "kredi_skoru": 1080,
+    "borc_gelir_orani": 0.18,
+    "onay": 0
+  },
+  {
+    "id": 120,
+    "yas": 26,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 933,
+    "borc_gelir_orani": 0.225,
+    "onay": 0
+  },
+  {
+    "id": 121,
+    "yas": 40,
+    "aylik_gelir": 27323,
+    "kredi_skoru": 1321,
+    "borc_gelir_orani": 0.092,
+    "onay": 1
+  },
+  {
+    "id": 122,
+    "yas": 51,
+    "aylik_gelir": 25200,
+    "kredi_skoru": 1089,
+    "borc_gelir_orani": 0.076,
+    "onay": 1
+  },
+  {
+    "id": 123,
+    "yas": 50,
+    "aylik_gelir": 12313,
+    "kredi_skoru": 735,
+    "borc_gelir_orani": 0.29,
+    "onay": 0
+  },
+  {
+    "id": 124,
+    "yas": 42,
+    "aylik_gelir": 14912,
+    "kredi_skoru": 1195,
+    "borc_gelir_orani": 0.106,
+    "onay": 1
+  },
+  {
+    "id": 125,
+    "yas": 59,
+    "aylik_gelir": 25458,
+    "kredi_skoru": 854,
+    "borc_gelir_orani": 0.264,
+    "onay": 1
+  },
+  {
+    "id": 126,
+    "yas": 46,
+    "aylik_gelir": 19806,
+    "kredi_skoru": 1068,
+    "borc_gelir_orani": 0.209,
+    "onay": 1
+  },
+  {
+    "id": 127,
+    "yas": 24,
+    "aylik_gelir": 13025,
+    "kredi_skoru": 947,
+    "borc_gelir_orani": 0.317,
+    "onay": 0
+  },
+  {
+    "id": 128,
+    "yas": 55,
+    "aylik_gelir": 20569,
+    "kredi_skoru": 1039,
+    "borc_gelir_orani": 0.223,
+    "onay": 1
+  },
+  {
+    "id": 129,
+    "yas": 46,
+    "aylik_gelir": 17270,
+    "kredi_skoru": 1478,
+    "borc_gelir_orani": 0.322,
+    "onay": 1
+  },
+  {
+    "id": 130,
+    "yas": 49,
+    "aylik_gelir": 21478,
+    "kredi_skoru": 1267,
+    "borc_gelir_orani": 0.138,
+    "onay": 1
+  },
+  {
+    "id": 131,
+    "yas": 46,
+    "aylik_gelir": 37508,
+    "kredi_skoru": 1346,
+    "borc_gelir_orani": 0.131,
+    "onay": 1
+  },
+  {
+    "id": 132,
+    "yas": 45,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 855,
+    "borc_gelir_orani": 0.208,
+    "onay": 0
+  },
+  {
+    "id": 133,
+    "yas": 25,
+    "aylik_gelir": 13515,
+    "kredi_skoru": 737,
+    "borc_gelir_orani": 0.685,
+    "onay": 0
+  },
+  {
+    "id": 134,
+    "yas": 46,
+    "aylik_gelir": 20943,
+    "kredi_skoru": 1255,
+    "borc_gelir_orani": 0.195,
+    "onay": 1
+  },
+  {
+    "id": 135,
+    "yas": 56,
+    "aylik_gelir": 24917,
+    "kredi_skoru": 998,
+    "borc_gelir_orani": 0.257,
+    "onay": 1
+  },
+  {
+    "id": 136,
+    "yas": 34,
+    "aylik_gelir": 14168,
+    "kredi_skoru": 1243,
+    "borc_gelir_orani": 0.365,
+    "onay": 0
+  },
+  {
+    "id": 137,
+    "yas": 48,
+    "aylik_gelir": 8988,
+    "kredi_skoru": 1028,
+    "borc_gelir_orani": 0.111,
+    "onay": 0
+  },
+  {
+    "id": 138,
+    "yas": 22,
+    "aylik_gelir": 16810,
+    "kredi_skoru": 1141,
+    "borc_gelir_orani": 0.213,
+    "onay": 0
+  },
+  {
+    "id": 139,
+    "yas": 36,
+    "aylik_gelir": 37326,
+    "kredi_skoru": 1115,
+    "borc_gelir_orani": 0.247,
+    "onay": 1
+  },
+  {
+    "id": 140,
+    "yas": 40,
+    "aylik_gelir": 9026,
+    "kredi_skoru": 1011,
+    "borc_gelir_orani": 0.487,
+    "onay": 0
+  },
+  {
+    "id": 141,
+    "yas": 65,
+    "aylik_gelir": 35841,
+    "kredi_skoru": 1063,
+    "borc_gelir_orani": 0.302,
+    "onay": 1
+  },
+  {
+    "id": 142,
+    "yas": 30,
+    "aylik_gelir": 13771,
+    "kredi_skoru": 1068,
+    "borc_gelir_orani": 0.311,
+    "onay": 0
+  },
+  {
+    "id": 143,
+    "yas": 33,
+    "aylik_gelir": 16099,
+    "kredi_skoru": 1095,
+    "borc_gelir_orani": 0.289,
+    "onay": 1
+  },
+  {
+    "id": 144,
+    "yas": 39,
+    "aylik_gelir": 11074,
+    "kredi_skoru": 808,
+    "borc_gelir_orani": 0.554,
+    "onay": 0
+  },
+  {
+    "id": 145,
+    "yas": 65,
+    "aylik_gelir": 20902,
+    "kredi_skoru": 1194,
+    "borc_gelir_orani": 0.351,
+    "onay": 1
+  },
+  {
+    "id": 146,
+    "yas": 59,
+    "aylik_gelir": 40585,
+    "kredi_skoru": 1033,
+    "borc_gelir_orani": 0.587,
+    "onay": 0
+  },
+  {
+    "id": 147,
+    "yas": 22,
+    "aylik_gelir": 18851,
+    "kredi_skoru": 1130,
+    "borc_gelir_orani": 0.287,
+    "onay": 1
+  },
+  {
+    "id": 148,
+    "yas": 31,
+    "aylik_gelir": 35230,
+    "kredi_skoru": 967,
+    "borc_gelir_orani": 0.491,
+    "onay": 0
+  },
+  {
+    "id": 149,
+    "yas": 57,
+    "aylik_gelir": 37495,
+    "kredi_skoru": 1204,
+    "borc_gelir_orani": 0.476,
+    "onay": 0
+  },
+  {
+    "id": 150,
+    "yas": 23,
+    "aylik_gelir": 17885,
+    "kredi_skoru": 946,
+    "borc_gelir_orani": 0.509,
+    "onay": 0
+  },
+  {
+    "id": 151,
+    "yas": 59,
+    "aylik_gelir": 49558,
+    "kredi_skoru": 1204,
+    "borc_gelir_orani": 0.235,
+    "onay": 1
+  },
+  {
+    "id": 152,
+    "yas": 33,
+    "aylik_gelir": 20164,
+    "kredi_skoru": 1072,
+    "borc_gelir_orani": 0.424,
+    "onay": 1
+  },
+  {
+    "id": 153,
+    "yas": 62,
+    "aylik_gelir": 34021,
+    "kredi_skoru": 1477,
+    "borc_gelir_orani": 0.305,
+    "onay": 1
+  },
+  {
+    "id": 154,
+    "yas": 34,
+    "aylik_gelir": 14657,
+    "kredi_skoru": 1010,
+    "borc_gelir_orani": 0.122,
+    "onay": 1
+  },
+  {
+    "id": 155,
+    "yas": 40,
+    "aylik_gelir": 18547,
+    "kredi_skoru": 1297,
+    "borc_gelir_orani": 0.268,
+    "onay": 1
+  },
+  {
+    "id": 156,
+    "yas": 50,
+    "aylik_gelir": 14828,
+    "kredi_skoru": 757,
+    "borc_gelir_orani": 0.342,
+    "onay": 0
+  },
+  {
+    "id": 157,
+    "yas": 26,
+    "aylik_gelir": 23752,
+    "kredi_skoru": 1300,
+    "borc_gelir_orani": 0.141,
+    "onay": 1
+  },
+  {
+    "id": 158,
+    "yas": 46,
+    "aylik_gelir": 11383,
+    "kredi_skoru": 1418,
+    "borc_gelir_orani": 0.277,
+    "onay": 1
+  },
+  {
+    "id": 159,
+    "yas": 43,
+    "aylik_gelir": 26534,
+    "kredi_skoru": 1057,
+    "borc_gelir_orani": 0.568,
+    "onay": 0
+  },
+  {
+    "id": 160,
+    "yas": 56,
+    "aylik_gelir": 20017,
+    "kredi_skoru": 1274,
+    "borc_gelir_orani": 0.153,
+    "onay": 0
+  },
+  {
+    "id": 161,
+    "yas": 65,
+    "aylik_gelir": 41159,
+    "kredi_skoru": 953,
+    "borc_gelir_orani": 0.499,
+    "onay": 1
+  },
+  {
+    "id": 162,
+    "yas": 50,
+    "aylik_gelir": 28453,
+    "kredi_skoru": 934,
+    "borc_gelir_orani": 0.633,
+    "onay": 0
+  },
+  {
+    "id": 163,
+    "yas": 39,
+    "aylik_gelir": 40353,
+    "kredi_skoru": 1245,
+    "borc_gelir_orani": 0.158,
+    "onay": 1
+  },
+  {
+    "id": 164,
+    "yas": 39,
+    "aylik_gelir": 24710,
+    "kredi_skoru": 1110,
+    "borc_gelir_orani": 0.158,
+    "onay": 1
+  },
+  {
+    "id": 165,
+    "yas": 39,
+    "aylik_gelir": 8767,
+    "kredi_skoru": 902,
+    "borc_gelir_orani": 0.525,
+    "onay": 0
+  },
+  {
+    "id": 166,
+    "yas": 57,
+    "aylik_gelir": 21418,
+    "kredi_skoru": 1256,
+    "borc_gelir_orani": 0.191,
+    "onay": 1
+  },
+  {
+    "id": 167,
+    "yas": 35,
+    "aylik_gelir": 10004,
+    "kredi_skoru": 1112,
+    "borc_gelir_orani": 0.107,
+    "onay": 0
+  },
+  {
+    "id": 168,
+    "yas": 28,
+    "aylik_gelir": 12344,
+    "kredi_skoru": 1100,
+    "borc_gelir_orani": 0.122,
+    "onay": 1
+  },
+  {
+    "id": 169,
+    "yas": 36,
+    "aylik_gelir": 33866,
+    "kredi_skoru": 700,
+    "borc_gelir_orani": 0.629,
+    "onay": 0
+  },
+  {
+    "id": 170,
+    "yas": 22,
+    "aylik_gelir": 19322,
+    "kredi_skoru": 1363,
+    "borc_gelir_orani": 0.079,
+    "onay": 1
+  },
+  {
+    "id": 171,
+    "yas": 25,
+    "aylik_gelir": 10978,
+    "kredi_skoru": 1377,
+    "borc_gelir_orani": 0.069,
+    "onay": 1
+  },
+  {
+    "id": 172,
+    "yas": 25,
+    "aylik_gelir": 9528,
+    "kredi_skoru": 1172,
+    "borc_gelir_orani": 0.276,
+    "onay": 0
+  },
+  {
+    "id": 173,
+    "yas": 55,
+    "aylik_gelir": 21870,
+    "kredi_skoru": 1116,
+    "borc_gelir_orani": 0.589,
+    "onay": 0
+  },
+  {
+    "id": 174,
+    "yas": 53,
+    "aylik_gelir": 12169,
+    "kredi_skoru": 1089,
+    "borc_gelir_orani": 0.367,
+    "onay": 0
+  },
+  {
+    "id": 175,
+    "yas": 52,
+    "aylik_gelir": 15369,
+    "kredi_skoru": 1147,
+    "borc_gelir_orani": 0.374,
+    "onay": 1
+  },
+  {
+    "id": 176,
+    "yas": 41,
+    "aylik_gelir": 20963,
+    "kredi_skoru": 899,
+    "borc_gelir_orani": 0.726,
+    "onay": 0
+  },
+  {
+    "id": 177,
+    "yas": 53,
+    "aylik_gelir": 35384,
+    "kredi_skoru": 1259,
+    "borc_gelir_orani": 0.162,
+    "onay": 1
+  },
+  {
+    "id": 178,
+    "yas": 28,
+    "aylik_gelir": 20498,
+    "kredi_skoru": 1013,
+    "borc_gelir_orani": 0.346,
+    "onay": 0
+  },
+  {
+    "id": 179,
+    "yas": 61,
+    "aylik_gelir": 8259,
+    "kredi_skoru": 1622,
+    "borc_gelir_orani": 0.139,
+    "onay": 1
+  },
+  {
+    "id": 180,
+    "yas": 43,
+    "aylik_gelir": 21399,
+    "kredi_skoru": 1078,
+    "borc_gelir_orani": 0.278,
+    "onay": 1
+  },
+  {
+    "id": 181,
+    "yas": 63,
+    "aylik_gelir": 24503,
+    "kredi_skoru": 1045,
+    "borc_gelir_orani": 0.281,
+    "onay": 0
+  },
+  {
+    "id": 182,
+    "yas": 27,
+    "aylik_gelir": 18553,
+    "kredi_skoru": 1168,
+    "borc_gelir_orani": 0.367,
+    "onay": 0
+  },
+  {
+    "id": 183,
+    "yas": 43,
+    "aylik_gelir": 38616,
+    "kredi_skoru": 1188,
+    "borc_gelir_orani": 0.362,
+    "onay": 1
+  },
+  {
+    "id": 184,
+    "yas": 52,
+    "aylik_gelir": 8215,
+    "kredi_skoru": 955,
+    "borc_gelir_orani": 0.161,
+    "onay": 1
+  },
+  {
+    "id": 185,
+    "yas": 43,
+    "aylik_gelir": 14302,
+    "kredi_skoru": 1454,
+    "borc_gelir_orani": 0.12,
+    "onay": 1
+  },
+  {
+    "id": 186,
+    "yas": 41,
+    "aylik_gelir": 23767,
+    "kredi_skoru": 1248,
+    "borc_gelir_orani": 0.135,
+    "onay": 1
+  },
+  {
+    "id": 187,
+    "yas": 28,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 643,
+    "borc_gelir_orani": 0.681,
+    "onay": 0
+  },
+  {
+    "id": 188,
+    "yas": 38,
+    "aylik_gelir": 34143,
+    "kredi_skoru": 1459,
+    "borc_gelir_orani": 0.2,
+    "onay": 1
+  },
+  {
+    "id": 189,
+    "yas": 31,
+    "aylik_gelir": 19070,
+    "kredi_skoru": 1376,
+    "borc_gelir_orani": 0.121,
+    "onay": 1
+  },
+  {
+    "id": 190,
+    "yas": 34,
+    "aylik_gelir": 24516,
+    "kredi_skoru": 782,
+    "borc_gelir_orani": 0.502,
+    "onay": 0
+  },
+  {
+    "id": 191,
+    "yas": 51,
+    "aylik_gelir": 15886,
+    "kredi_skoru": 1524,
+    "borc_gelir_orani": 0.194,
+    "onay": 1
+  },
+  {
+    "id": 192,
+    "yas": 49,
+    "aylik_gelir": 28921,
+    "kredi_skoru": 1347,
+    "borc_gelir_orani": 0.205,
+    "onay": 1
+  },
+  {
+    "id": 193,
+    "yas": 48,
+    "aylik_gelir": 32046,
+    "kredi_skoru": 1219,
+    "borc_gelir_orani": 0.228,
+    "onay": 1
+  },
+  {
+    "id": 194,
+    "yas": 37,
+    "aylik_gelir": 19282,
+    "kredi_skoru": 1399,
+    "borc_gelir_orani": 0.337,
+    "onay": 1
+  },
+  {
+    "id": 195,
+    "yas": 64,
+    "aylik_gelir": 26678,
+    "kredi_skoru": 1057,
+    "borc_gelir_orani": 0.483,
+    "onay": 1
+  },
+  {
+    "id": 196,
+    "yas": 24,
+    "aylik_gelir": 16777,
+    "kredi_skoru": 1216,
+    "borc_gelir_orani": 0.173,
+    "onay": 1
+  },
+  {
+    "id": 197,
+    "yas": 36,
+    "aylik_gelir": 11633,
+    "kredi_skoru": 821,
+    "borc_gelir_orani": 0.556,
+    "onay": 0
+  },
+  {
+    "id": 198,
+    "yas": 26,
+    "aylik_gelir": 14239,
+    "kredi_skoru": 1165,
+    "borc_gelir_orani": 0.394,
+    "onay": 0
+  },
+  {
+    "id": 199,
+    "yas": 36,
+    "aylik_gelir": 16018,
+    "kredi_skoru": 1275,
+    "borc_gelir_orani": 0.216,
+    "onay": 1
+  },
+  {
+    "id": 200,
+    "yas": 64,
+    "aylik_gelir": 28528,
+    "kredi_skoru": 1027,
+    "borc_gelir_orani": 0.496,
+    "onay": 1
+  },
+  {
+    "id": 201,
+    "yas": 37,
+    "aylik_gelir": 27229,
+    "kredi_skoru": 863,
+    "borc_gelir_orani": 0.519,
+    "onay": 0
+  },
+  {
+    "id": 202,
+    "yas": 61,
+    "aylik_gelir": 14383,
+    "kredi_skoru": 1108,
+    "borc_gelir_orani": 0.359,
+    "onay": 0
+  },
+  {
+    "id": 203,
+    "yas": 43,
+    "aylik_gelir": 17639,
+    "kredi_skoru": 776,
+    "borc_gelir_orani": 0.794,
+    "onay": 0
+  },
+  {
+    "id": 204,
+    "yas": 52,
+    "aylik_gelir": 40489,
+    "kredi_skoru": 783,
+    "borc_gelir_orani": 0.54,
+    "onay": 0
+  },
+  {
+    "id": 205,
+    "yas": 41,
+    "aylik_gelir": 13037,
+    "kredi_skoru": 802,
+    "borc_gelir_orani": 0.379,
+    "onay": 0
+  },
+  {
+    "id": 206,
+    "yas": 32,
+    "aylik_gelir": 11295,
+    "kredi_skoru": 1052,
+    "borc_gelir_orani": 0.54,
+    "onay": 0
+  },
+  {
+    "id": 207,
+    "yas": 55,
+    "aylik_gelir": 23604,
+    "kredi_skoru": 500,
+    "borc_gelir_orani": 0.563,
+    "onay": 0
+  },
+  {
+    "id": 208,
+    "yas": 64,
+    "aylik_gelir": 35105,
+    "kredi_skoru": 1388,
+    "borc_gelir_orani": 0.052,
+    "onay": 1
+  },
+  {
+    "id": 209,
+    "yas": 32,
+    "aylik_gelir": 16437,
+    "kredi_skoru": 1217,
+    "borc_gelir_orani": 0.055,
+    "onay": 1
+  },
+  {
+    "id": 210,
+    "yas": 56,
+    "aylik_gelir": 39662,
+    "kredi_skoru": 1553,
+    "borc_gelir_orani": 0.117,
+    "onay": 1
+  },
+  {
+    "id": 211,
+    "yas": 32,
+    "aylik_gelir": 24045,
+    "kredi_skoru": 914,
+    "borc_gelir_orani": 0.511,
+    "onay": 0
+  },
+  {
+    "id": 212,
+    "yas": 53,
+    "aylik_gelir": 30729,
+    "kredi_skoru": 1342,
+    "borc_gelir_orani": 0.219,
+    "onay": 1
+  },
+  {
+    "id": 213,
+    "yas": 56,
+    "aylik_gelir": 27987,
+    "kredi_skoru": 1233,
+    "borc_gelir_orani": 0.093,
+    "onay": 1
+  },
+  {
+    "id": 214,
+    "yas": 41,
+    "aylik_gelir": 51926,
+    "kredi_skoru": 1321,
+    "borc_gelir_orani": 0.184,
+    "onay": 1
+  },
+  {
+    "id": 215,
+    "yas": 54,
+    "aylik_gelir": 19415,
+    "kredi_skoru": 1240,
+    "borc_gelir_orani": 0.345,
+    "onay": 1
+  },
+  {
+    "id": 216,
+    "yas": 33,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 936,
+    "borc_gelir_orani": 0.43,
+    "onay": 0
+  },
+  {
+    "id": 217,
+    "yas": 24,
+    "aylik_gelir": 30578,
+    "kredi_skoru": 1430,
+    "borc_gelir_orani": 0.18,
+    "onay": 1
+  },
+  {
+    "id": 218,
+    "yas": 25,
+    "aylik_gelir": 12236,
+    "kredi_skoru": 878,
+    "borc_gelir_orani": 0.391,
+    "onay": 0
+  },
+  {
+    "id": 219,
+    "yas": 41,
+    "aylik_gelir": 19124,
+    "kredi_skoru": 1121,
+    "borc_gelir_orani": 0.4,
+    "onay": 0
+  },
+  {
+    "id": 220,
+    "yas": 61,
+    "aylik_gelir": 41749,
+    "kredi_skoru": 1108,
+    "borc_gelir_orani": 0.66,
+    "onay": 1
+  },
+  {
+    "id": 221,
+    "yas": 26,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 1206,
+    "borc_gelir_orani": 0.332,
+    "onay": 0
+  },
+  {
+    "id": 222,
+    "yas": 41,
+    "aylik_gelir": 10372,
+    "kredi_skoru": 1076,
+    "borc_gelir_orani": 0.85,
+    "onay": 0
+  },
+  {
+    "id": 223,
+    "yas": 52,
+    "aylik_gelir": 10113,
+    "kredi_skoru": 1010,
+    "borc_gelir_orani": 0.254,
+    "onay": 1
+  },
+  {
+    "id": 224,
+    "yas": 30,
+    "aylik_gelir": 11168,
+    "kredi_skoru": 946,
+    "borc_gelir_orani": 0.191,
+    "onay": 0
+  },
+  {
+    "id": 225,
+    "yas": 53,
+    "aylik_gelir": 25641,
+    "kredi_skoru": 851,
+    "borc_gelir_orani": 0.477,
+    "onay": 0
+  },
+  {
+    "id": 226,
+    "yas": 34,
+    "aylik_gelir": 21205,
+    "kredi_skoru": 1042,
+    "borc_gelir_orani": 0.614,
+    "onay": 0
+  },
+  {
+    "id": 227,
+    "yas": 57,
+    "aylik_gelir": 24995,
+    "kredi_skoru": 1378,
+    "borc_gelir_orani": 0.106,
+    "onay": 1
+  },
+  {
+    "id": 228,
+    "yas": 47,
+    "aylik_gelir": 10367,
+    "kredi_skoru": 1230,
+    "borc_gelir_orani": 0.164,
+    "onay": 1
+  },
+  {
+    "id": 229,
+    "yas": 45,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 878,
+    "borc_gelir_orani": 0.343,
+    "onay": 0
+  },
+  {
+    "id": 230,
+    "yas": 28,
+    "aylik_gelir": 15972,
+    "kredi_skoru": 1131,
+    "borc_gelir_orani": 0.495,
+    "onay": 0
+  },
+  {
+    "id": 231,
+    "yas": 41,
+    "aylik_gelir": 14733,
+    "kredi_skoru": 1040,
+    "borc_gelir_orani": 0.109,
+    "onay": 0
+  },
+  {
+    "id": 232,
+    "yas": 59,
+    "aylik_gelir": 27802,
+    "kredi_skoru": 1357,
+    "borc_gelir_orani": 0.316,
+    "onay": 1
+  },
+  {
+    "id": 233,
+    "yas": 21,
+    "aylik_gelir": 19653,
+    "kredi_skoru": 1411,
+    "borc_gelir_orani": 0.646,
+    "onay": 0
+  },
+  {
+    "id": 234,
+    "yas": 55,
+    "aylik_gelir": 22933,
+    "kredi_skoru": 1171,
+    "borc_gelir_orani": 0.361,
+    "onay": 1
+  },
+  {
+    "id": 235,
+    "yas": 43,
+    "aylik_gelir": 26270,
+    "kredi_skoru": 1261,
+    "borc_gelir_orani": 0.3,
+    "onay": 1
+  },
+  {
+    "id": 236,
+    "yas": 53,
+    "aylik_gelir": 23325,
+    "kredi_skoru": 749,
+    "borc_gelir_orani": 0.743,
+    "onay": 0
+  },
+  {
+    "id": 237,
+    "yas": 50,
+    "aylik_gelir": 25762,
+    "kredi_skoru": 735,
+    "borc_gelir_orani": 0.434,
+    "onay": 0
+  },
+  {
+    "id": 238,
+    "yas": 40,
+    "aylik_gelir": 13109,
+    "kredi_skoru": 880,
+    "borc_gelir_orani": 0.492,
+    "onay": 0
+  },
+  {
+    "id": 239,
+    "yas": 34,
+    "aylik_gelir": 15449,
+    "kredi_skoru": 709,
+    "borc_gelir_orani": 0.618,
+    "onay": 0
+  },
+  {
+    "id": 240,
+    "yas": 49,
+    "aylik_gelir": 21910,
+    "kredi_skoru": 798,
+    "borc_gelir_orani": 0.423,
+    "onay": 0
+  },
+  {
+    "id": 241,
+    "yas": 27,
+    "aylik_gelir": 22278,
+    "kredi_skoru": 1482,
+    "borc_gelir_orani": 0.262,
+    "onay": 1
+  },
+  {
+    "id": 242,
+    "yas": 47,
+    "aylik_gelir": 16398,
+    "kredi_skoru": 1083,
+    "borc_gelir_orani": 0.439,
+    "onay": 0
+  },
+  {
+    "id": 243,
+    "yas": 25,
+    "aylik_gelir": 19009,
+    "kredi_skoru": 1162,
+    "borc_gelir_orani": 0.362,
+    "onay": 1
+  },
+  {
+    "id": 244,
+    "yas": 50,
+    "aylik_gelir": 18007,
+    "kredi_skoru": 1133,
+    "borc_gelir_orani": 0.223,
+    "onay": 1
+  },
+  {
+    "id": 245,
+    "yas": 49,
+    "aylik_gelir": 19020,
+    "kredi_skoru": 750,
+    "borc_gelir_orani": 0.809,
+    "onay": 0
+  },
+  {
+    "id": 246,
+    "yas": 24,
+    "aylik_gelir": 21578,
+    "kredi_skoru": 1217,
+    "borc_gelir_orani": 0.443,
+    "onay": 0
+  },
+  {
+    "id": 247,
+    "yas": 55,
+    "aylik_gelir": 8789,
+    "kredi_skoru": 967,
+    "borc_gelir_orani": 0.499,
+    "onay": 0
+  },
+  {
+    "id": 248,
+    "yas": 39,
+    "aylik_gelir": 9924,
+    "kredi_skoru": 1108,
+    "borc_gelir_orani": 0.446,
+    "onay": 1
+  },
+  {
+    "id": 249,
+    "yas": 56,
+    "aylik_gelir": 11194,
+    "kredi_skoru": 1230,
+    "borc_gelir_orani": 0.089,
+    "onay": 1
+  },
+  {
+    "id": 250,
+    "yas": 22,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 969,
+    "borc_gelir_orani": 0.414,
+    "onay": 0
+  },
+  {
+    "id": 251,
+    "yas": 29,
+    "aylik_gelir": 11625,
+    "kredi_skoru": 930,
+    "borc_gelir_orani": 0.209,
+    "onay": 0
+  },
+  {
+    "id": 252,
+    "yas": 43,
+    "aylik_gelir": 26144,
+    "kredi_skoru": 902,
+    "borc_gelir_orani": 0.154,
+    "onay": 0
+  },
+  {
+    "id": 253,
+    "yas": 29,
+    "aylik_gelir": 13876,
+    "kredi_skoru": 1082,
+    "borc_gelir_orani": 0.294,
+    "onay": 0
+  },
+  {
+    "id": 254,
+    "yas": 35,
+    "aylik_gelir": 18530,
+    "kredi_skoru": 1167,
+    "borc_gelir_orani": 0.27,
+    "onay": 0
+  },
+  {
+    "id": 255,
+    "yas": 50,
+    "aylik_gelir": 33133,
+    "kredi_skoru": 677,
+    "borc_gelir_orani": 0.678,
+    "onay": 0
+  },
+  {
+    "id": 256,
+    "yas": 27,
+    "aylik_gelir": 27990,
+    "kredi_skoru": 1215,
+    "borc_gelir_orani": 0.213,
+    "onay": 1
+  },
+  {
+    "id": 257,
+    "yas": 51,
+    "aylik_gelir": 19911,
+    "kredi_skoru": 1234,
+    "borc_gelir_orani": 0.179,
+    "onay": 1
+  },
+  {
+    "id": 258,
+    "yas": 25,
+    "aylik_gelir": 27646,
+    "kredi_skoru": 833,
+    "borc_gelir_orani": 0.211,
+    "onay": 0
+  },
+  {
+    "id": 259,
+    "yas": 28,
+    "aylik_gelir": 16246,
+    "kredi_skoru": 830,
+    "borc_gelir_orani": 0.494,
+    "onay": 0
+  },
+  {
+    "id": 260,
+    "yas": 47,
+    "aylik_gelir": 13431,
+    "kredi_skoru": 1349,
+    "borc_gelir_orani": 0.082,
+    "onay": 1
+  },
+  {
+    "id": 261,
+    "yas": 56,
+    "aylik_gelir": 16691,
+    "kredi_skoru": 1101,
+    "borc_gelir_orani": 0.444,
+    "onay": 0
+  },
+  {
+    "id": 262,
+    "yas": 28,
+    "aylik_gelir": 8006,
+    "kredi_skoru": 877,
+    "borc_gelir_orani": 0.336,
+    "onay": 0
+  },
+  {
+    "id": 263,
+    "yas": 34,
+    "aylik_gelir": 11231,
+    "kredi_skoru": 1044,
+    "borc_gelir_orani": 0.446,
+    "onay": 0
+  },
+  {
+    "id": 264,
+    "yas": 62,
+    "aylik_gelir": 19951,
+    "kredi_skoru": 1330,
+    "borc_gelir_orani": 0.291,
+    "onay": 1
+  },
+  {
+    "id": 265,
+    "yas": 65,
+    "aylik_gelir": 34882,
+    "kredi_skoru": 1221,
+    "borc_gelir_orani": 0.437,
+    "onay": 1
+  },
+  {
+    "id": 266,
+    "yas": 47,
+    "aylik_gelir": 42467,
+    "kredi_skoru": 1068,
+    "borc_gelir_orani": 0.458,
+    "onay": 1
+  },
+  {
+    "id": 267,
+    "yas": 41,
+    "aylik_gelir": 9780,
+    "kredi_skoru": 1115,
+    "borc_gelir_orani": 0.179,
+    "onay": 0
+  },
+  {
+    "id": 268,
+    "yas": 36,
+    "aylik_gelir": 20474,
+    "kredi_skoru": 1180,
+    "borc_gelir_orani": 0.083,
+    "onay": 1
+  },
+  {
+    "id": 269,
+    "yas": 48,
+    "aylik_gelir": 12405,
+    "kredi_skoru": 1104,
+    "borc_gelir_orani": 0.444,
+    "onay": 0
+  },
+  {
+    "id": 270,
+    "yas": 47,
+    "aylik_gelir": 24240,
+    "kredi_skoru": 1101,
+    "borc_gelir_orani": 0.421,
+    "onay": 0
+  },
+  {
+    "id": 271,
+    "yas": 34,
+    "aylik_gelir": 15790,
+    "kredi_skoru": 1215,
+    "borc_gelir_orani": 0.34,
+    "onay": 1
+  },
+  {
+    "id": 272,
+    "yas": 22,
+    "aylik_gelir": 8000,
+    "kredi_skoru": 1309,
+    "borc_gelir_orani": 0.049,
+    "onay": 1
+  },
+  {
+    "id": 273,
+    "yas": 27,
+    "aylik_gelir": 23385,
+    "kredi_skoru": 1245,
+    "borc_gelir_orani": 0.373,
+    "onay": 0
+  },
+  {
+    "id": 274,
+    "yas": 64,
+    "aylik_gelir": 18286,
+    "kredi_skoru": 1259,
+    "borc_gelir_orani": 0.148,
+    "onay": 1
+  },
+  {
+    "id": 275,
+    "yas": 39,
+    "aylik_gelir": 13987,
+    "kredi_skoru": 1151,
+    "borc_gelir_orani": 0.465,
+    "onay": 0
+  },
+  {
+    "id": 276,
+    "yas": 42,
+    "aylik_gelir": 11393,
+    "kredi_skoru": 1009,
+    "borc_gelir_orani": 0.68,
+    "onay": 0
+  },
+  {
+    "id": 277,
+    "yas": 42,
+    "aylik_gelir": 13735,
+    "kredi_skoru": 846,
+    "borc_gelir_orani": 0.491,
+    "onay": 0
+  },
+  {
+    "id": 278,
+    "yas": 56,
+    "aylik_gelir": 26441,
+    "kredi_skoru": 866,
+    "borc_gelir_orani": 0.25,
+    "onay": 1
+  },
+  {
+    "id": 279,
+    "yas": 23,
+    "aylik_gelir": 13480,
+    "kredi_skoru": 1434,
+    "borc_gelir_orani": 0.253,
+    "onay": 1
+  },
+  {
+    "id": 280,
+    "yas": 24,
+    "aylik_gelir": 17223,
+    "kredi_skoru": 1330,
+    "borc_gelir_orani": 0.084,
+    "onay": 1
+  },
+  {
+    "id": 281,
+    "yas": 33,
+    "aylik_gelir": 19477,
+    "kredi_skoru": 899,
+    "borc_gelir_orani": 0.202,
+    "onay": 0
+  },
+  {
+    "id": 282,
+    "yas": 42,
+    "aylik_gelir": 33404,
+    "kredi_skoru": 1035,
+    "borc_gelir_orani": 0.314,
+    "onay": 1
+  },
+  {
+    "id": 283,
+    "yas": 51,
+    "aylik_gelir": 17604,
+    "kredi_skoru": 1075,
+    "borc_gelir_orani": 0.583,
+    "onay": 0
+  },
+  {
+    "id": 284,
+    "yas": 43,
+    "aylik_gelir": 9600,
+    "kredi_skoru": 1134,
+    "borc_gelir_orani": 0.2,
+    "onay": 1
+  },
+  {
+    "id": 285,
+    "yas": 40,
+    "aylik_gelir": 29097,
+    "kredi_skoru": 945,
+    "borc_gelir_orani": 0.479,
+    "onay": 0
+  },
+  {
+    "id": 286,
+    "yas": 63,
+    "aylik_gelir": 20434,
+    "kredi_skoru": 1302,
+    "borc_gelir_orani": 0.43,
+    "onay": 0
+  },
+  {
+    "id": 287,
+    "yas": 28,
+    "aylik_gelir": 25737,
+    "kredi_skoru": 1114,
+    "borc_gelir_orani": 0.089,
+    "onay": 1
+  },
+  {
+    "id": 288,
+    "yas": 46,
+    "aylik_gelir": 22986,
+    "kredi_skoru": 995,
+    "borc_gelir_orani": 0.312,
+    "onay": 0
+  },
+  {
+    "id": 289,
+    "yas": 45,
+    "aylik_gelir": 18018,
+    "kredi_skoru": 1097,
+    "borc_gelir_orani": 0.408,
+    "onay": 0
+  },
+  {
+    "id": 290,
+    "yas": 42,
+    "aylik_gelir": 21570,
+    "kredi_skoru": 1228,
+    "borc_gelir_orani": 0.28,
+    "onay": 1
+  },
+  {
+    "id": 291,
+    "yas": 57,
+    "aylik_gelir": 53108,
+    "kredi_skoru": 1050,
+    "borc_gelir_orani": 0.674,
+    "onay": 1
+  },
+  {
+    "id": 292,
+    "yas": 33,
+    "aylik_gelir": 42141,
+    "kredi_skoru": 1247,
+    "borc_gelir_orani": 0.461,
+    "onay": 0
+  },
+  {
+    "id": 293,
+    "yas": 63,
+    "aylik_gelir": 24474,
+    "kredi_skoru": 1155,
+    "borc_gelir_orani": 0.346,
+    "onay": 1
+  },
+  {
+    "id": 294,
+    "yas": 35,
+    "aylik_gelir": 18219,
+    "kredi_skoru": 1198,
+    "borc_gelir_orani": 0.336,
+    "onay": 1
+  },
+  {
+    "id": 295,
+    "yas": 45,
+    "aylik_gelir": 31021,
+    "kredi_skoru": 944,
+    "borc_gelir_orani": 0.552,
+    "onay": 0
+  },
+  {
+    "id": 296,
+    "yas": 44,
+    "aylik_gelir": 12908,
+    "kredi_skoru": 1269,
+    "borc_gelir_orani": 0.106,
+    "onay": 0
+  },
+  {
+    "id": 297,
+    "yas": 59,
+    "aylik_gelir": 26265,
+    "kredi_skoru": 1221,
+    "borc_gelir_orani": 0.234,
+    "onay": 1
+  },
+  {
+    "id": 298,
+    "yas": 40,
+    "aylik_gelir": 17792,
+    "kredi_skoru": 1158,
+    "borc_gelir_orani": 0.322,
+    "onay": 0
+  },
+  {
+    "id": 299,
+    "yas": 33,
+    "aylik_gelir": 19061,
+    "kredi_skoru": 1263,
+    "borc_gelir_orani": 0.319,
+    "onay": 1
+  },
+  {
+    "id": 300,
+    "yas": 21,
+    "aylik_gelir": 9849,
+    "kredi_skoru": 1302,
+    "borc_gelir_orani": 0.175,
+    "onay": 0
+  },
+  {
+    "id": 301,
+    "yas": 37,
+    "aylik_gelir": 8492,
+    "kredi_skoru": 1063,
+    "borc_gelir_orani": 0.38,
+    "onay": 0
+  },
+  {
+    "id": 302,
+    "yas": 58,
+    "aylik_gelir": 8789,
+    "kredi_skoru": 1169,
+    "borc_gelir_orani": 0.011,
+    "onay": 1
+  },
+  {
+    "id": 303,
+    "yas": 21,
+    "aylik_gelir": 8667,
+    "kredi_skoru": 1088,
+    "borc_gelir_orani": 0.351,
+    "onay": 0
+  },
+  {
+    "id": 304,
+    "yas": 61,
+    "aylik_gelir": 18840,
+    "kredi_skoru": 1322,
+    "borc_gelir_orani": 0.028,
+    "onay": 1
+  },
+  {
+    "id": 305,
+    "yas": 45,
+    "aylik_gelir": 16751,
+    "kredi_skoru": 1118,
+    "borc_gelir_orani": 0.37,
+    "onay": 0
+  },
+  {
+    "id": 306,
+    "yas": 27,
+    "aylik_gelir": 36823,
+    "kredi_skoru": 1657,
+    "borc_gelir_orani": 0.189,
+    "onay": 1
+  },
+  {
+    "id": 307,
+    "yas": 34,
+    "aylik_gelir": 27552,
+    "kredi_skoru": 864,
+    "borc_gelir_orani": 0.587,
+    "onay": 0
+  },
+  {
+    "id": 308,
+    "yas": 45,
+    "aylik_gelir": 12397,
+    "kredi_skoru": 1265,
+    "borc_gelir_orani": 0.203,
+    "onay": 0
+  },
+  {
+    "id": 309,
+    "yas": 35,
+    "aylik_gelir": 19823,
+    "kredi_skoru": 1214,
+    "borc_gelir_orani": 0.468,
+    "onay": 0
+  },
+  {
+    "id": 310,
+    "yas": 25,
+    "aylik_gelir": 12518,
+    "kredi_skoru": 1022,
+    "borc_gelir_orani": 0.467,
+    "onay": 0
+  },
+  {
+    "id": 311,
+    "yas": 50,
+    "aylik_gelir": 17857,
+    "kredi_skoru": 1632,
+    "borc_gelir_orani": 0.191,
+    "onay": 1
+  },
+  {
+    "id": 312,
+    "yas": 51,
+    "aylik_gelir": 22326,
+    "kredi_skoru": 1186,
+    "borc_gelir_orani": 0.145,
+    "onay": 1
+  },
+  {
+    "id": 313,
+    "yas": 26,
+    "aylik_gelir": 20106,
+    "kredi_skoru": 1228,
+    "borc_gelir_orani": 0.258,
+    "onay": 1
+  },
+  {
+    "id": 314,
+    "yas": 33,
+    "aylik_gelir": 14207,
+    "kredi_skoru": 1024,
+    "borc_gelir_orani": 0.24,
+    "onay": 1
+  },
+  {
+    "id": 315,
+    "yas": 31,
+    "aylik_gelir": 26078,
+    "kredi_skoru": 1159,
+    "borc_gelir_orani": 0.204,
+    "onay": 1
+  },
+  {
+    "id": 316,
+    "yas": 50,
+    "aylik_gelir": 12140,
+    "kredi_skoru": 1101,
+    "borc_gelir_orani": 0.392,
+    "onay": 0
+  },
+  {
+    "id": 317,
+    "yas": 53,
+    "aylik_gelir": 21099,
+    "kredi_skoru": 1406,
+    "borc_gelir_orani": 0.141,
+    "onay": 1
+  },
+  {
+    "id": 318,
+    "yas": 53,
+    "aylik_gelir": 67716,
+    "kredi_skoru": 1389,
+    "borc_gelir_orani": 0.197,
+    "onay": 1
+  },
+  {
+    "id": 319,
+    "yas": 63,
+    "aylik_gelir": 26226,
+    "kredi_skoru": 1429,
+    "borc_gelir_orani": 0.233,
+    "onay": 1
+  },
+  {
+    "id": 320,
+    "yas": 55,
+    "aylik_gelir": 41072,
+    "kredi_skoru": 1014,
+    "borc_gelir_orani": 0.531,
+    "onay": 0
+  },
+  {
+    "id": 321,
+    "yas": 35,
+    "aylik_gelir": 17664,
+    "kredi_skoru": 1142,
+    "borc_gelir_orani": 0.204,
+    "onay": 1
+  },
+  {
+    "id": 322,
+    "yas": 25,
+    "aylik_gelir": 19526,
+    "kredi_skoru": 1538,
+    "borc_gelir_orani": 0.425,
+    "onay": 1
+  },
+  {
+    "id": 323,
+    "yas": 48,
+    "aylik_gelir": 19314,
+    "kredi_skoru": 916,
+    "borc_gelir_orani": 0.719,
+    "onay": 0
+  },
+  {
+    "id": 324,
+    "yas": 62,
+    "aylik_gelir": 21708,
+    "kredi_skoru": 902,
+    "borc_gelir_orani": 0.461,
+    "onay": 0
+  },
+  {
+    "id": 325,
+    "yas": 64,
+    "aylik_gelir": 16905,
+    "kredi_skoru": 1028,
+    "borc_gelir_orani": 0.271,
+    "onay": 0
+  },
+  {
+    "id": 326,
+    "yas": 31,
+    "aylik_gelir": 19609,
+    "kredi_skoru": 962,
+    "borc_gelir_orani": 0.31,
+    "onay": 0
+  },
+  {
+    "id": 327,
+    "yas": 31,
+    "aylik_gelir": 11014,
+    "kredi_skoru": 1207,
+    "borc_gelir_orani": 0.413,
+    "onay": 1
+  },
+  {
+    "id": 328,
+    "yas": 22,
+    "aylik_gelir": 19568,
+    "kredi_skoru": 887,
+    "borc_gelir_orani": 0.566,
+    "onay": 0
+  },
+  {
+    "id": 329,
+    "yas": 27,
+    "aylik_gelir": 25097,
+    "kredi_skoru": 1149,
+    "borc_gelir_orani": 0.338,
+    "onay": 0
+  },
+  {
+    "id": 330,
+    "yas": 45,
+    "aylik_gelir": 22540,
+    "kredi_skoru": 1010,
+    "borc_gelir_orani": 0.479,
+    "onay": 0
+  }
+]
