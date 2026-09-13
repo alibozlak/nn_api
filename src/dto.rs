@@ -360,6 +360,12 @@ pub struct PredictRequest {
     /// `x` from a JSON file below the server's data directory.
     #[serde(default)]
     pub x_path: Option<String>,
+    /// For a model trained through `/train-with-column-scale`: scale `x` with
+    /// the ratios the model keeps and answer in `y`'s original units. Send
+    /// false to pass `x` through as it is, e.g. when it is already scaled. A
+    /// model with no ratios is never scaled.
+    #[serde(default = "default_true")]
+    pub scale: bool,
 }
 
 /// `POST /models/{id}/evaluate` -- Keras' `evaluate`.
@@ -445,6 +451,9 @@ pub struct ModelResponse {
     pub last_loss: Option<f64>,
     pub created_at_ms: u64,
     pub updated_at_ms: u64,
+    /// Set by `/train-with-column-scale`; `predict` scales with these.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ten_power_ratios: Option<Vec<usize>>,
     /// The table `model.summary()` prints.
     pub summary: String,
 }
@@ -480,6 +489,7 @@ impl ModelResponse {
             last_loss: model.last_loss,
             created_at_ms: model.created_at_ms,
             updated_at_ms: model.updated_at_ms,
+            ten_power_ratios: model.ten_power_ratios.clone(),
             summary: report.summary,
         }
     }
@@ -501,6 +511,8 @@ pub struct ModelListEntry {
     pub last_loss: Option<f64>,
     pub created_at_ms: u64,
     pub updated_at_ms: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ten_power_ratios: Option<Vec<usize>>,
 }
 
 impl From<&StoredModel> for ModelListEntry {
@@ -519,6 +531,7 @@ impl From<&StoredModel> for ModelListEntry {
             last_loss: model.last_loss,
             created_at_ms: model.created_at_ms,
             updated_at_ms: model.updated_at_ms,
+            ten_power_ratios: model.ten_power_ratios.clone(),
         }
     }
 }
@@ -558,9 +571,9 @@ pub struct ScaledTrainResponse {
     /// The power of ten each column was divided by: one entry per column of
     /// `x`, then `y`'s as the last. Taken from each column's first row.
     ///
-    /// `predict` and `evaluate` do not scale, so divide column `j` of their `x`
-    /// by `10^ten_power_ratios[j]`, and multiply a prediction by
-    /// `10^` the last entry to read it in the original units.
+    /// The model keeps them, and `predict` scales its `x` with them and answers
+    /// in the original units. `evaluate` does not: divide column `j` of its `x`
+    /// by `10^ten_power_ratios[j]` and its `y` by `10^` the last entry.
     #[schema(example = json!([3, 0, 5]))]
     pub ten_power_ratios: Vec<usize>,
 }
@@ -570,8 +583,14 @@ pub struct PredictResponse {
     pub id: Uuid,
     pub rows: usize,
     pub columns: usize,
-    /// One row per sample, one column per unit of the last layer.
+    /// One row per sample, one column per unit of the last layer. When `scaled`
+    /// is true, already multiplied back into `y`'s original units.
     pub predictions: Vec<Vec<f64>>,
+    /// Whether `x` was scaled with the model's `ten_power_ratios` first.
+    pub scaled: bool,
+    /// The ratios used, x's columns first and y's last; absent when `scaled` is false.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ten_power_ratios: Option<Vec<usize>>,
 }
 
 #[derive(Debug, Clone, Serialize, ToSchema)]

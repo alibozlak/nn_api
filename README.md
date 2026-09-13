@@ -233,10 +233,11 @@ The answer is a train answer plus the power of ten each column was divided by,
 }
 ```
 
-The losses are measured on the scaled values. And the ratios matter after
-training, because **`predict` and `evaluate` do not scale**: divide column `j`
-of their `x` by `10^ten_power_ratios[j]` before sending it, and multiply a
-prediction by `10^` the last entry to read it back in the original units.
+The losses are measured on the scaled values. The model keeps the ratios in
+memory -- `GET /models/{id}` shows them -- and **`predict` uses them**: send it
+raw samples, and it scales `x` the same way and answers in `y`'s original
+units. **`evaluate` does not scale**: divide column `j` of its `x` by
+`10^ten_power_ratios[j]` and its `y` by `10^` the last entry before sending them.
 
 Each ratio comes from its column's **first row** of the data sent. A later call
 on the same model whose first row has a different number of integer digits
@@ -254,9 +255,15 @@ keep the first ratios and send data that produces them again.
   "id": "0583b9da-...",
   "rows": 4,
   "columns": 1,
-  "predictions": [[0.0038], [0.9997], [0.9997], [0.0001]]
+  "predictions": [[0.0038], [0.9997], [0.9997], [0.0001]],
+  "scaled": false
 }
 ```
+
+After `POST /train-with-column-scale` the model has `ten_power_ratios`, so `x`
+is scaled with them before `predict` and every prediction is multiplied by
+`10^` the last ratio. The answer then carries `"scaled": true` and the ratios it
+used. Send `"scale": false` with `x` that is already scaled to skip both steps.
 
 ### `POST /models/{id}/evaluate`
 
@@ -430,7 +437,8 @@ Three things to watch on the Java side:
   ObjectMapper mapper = new ObjectMapper()
       .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
-  record Prediction(String id, int rows, int columns, double[][] predictions) {}
+  record Prediction(String id, int rows, int columns, double[][] predictions,
+                    boolean scaled, int[] tenPowerRatios) {}
   record TrainResult(int epochs, int samples, double initialLoss, double finalLoss,
                      int trainedEpochs, long durationMs) {}
   ```

@@ -1,0 +1,66 @@
+{
+    "model_77469c63-b912-47ef-8817-6e9a4cd678ed" : {
+        "id": "77469c63-b912-47ef-8817-6e9a4cd678ed",
+        "name": "lr_4_1",
+        "features": 4,
+        "output_units": 1,
+        "total_params": 25,
+        "layers": [
+            {
+            "name": "layer1",
+            "units": 4,
+            "activation": "relu",
+            "input_count": 4,
+            "params": 20
+            },
+            {
+            "name": "layer2",
+            "units": 1,
+            "activation": "sigmoid",
+            "input_count": 4,
+            "params": 5
+            }
+        ],
+        "loss": "binary_crossentropy",
+        "optimizer": {
+            "type": "sgd",
+            "learning_rate": 0.03 
+        },
+        "seed": 1234,
+        "batch_size": 300,
+        "trained_epochs": 20000,
+        "last_loss": 0.33194391343025376,
+        "created_at_ms": 1789320188239,
+        "updated_at_ms": 1789320560644,
+        "summary": "Model: sequential"
+    },
+
+    "train-with-column-scale_endpoint_requests" : [
+        {
+            "id": "77469c63-b912-47ef-8817-6e9a4cd678ed",
+            "epochs": 20000,
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.03
+            },
+            "initial_loss": 1.420400891956853,
+            "final_loss": 0.33194391343025376,
+            "trained_epochs": 20000,
+            "duration_ms": 364,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ]
+        }
+    ], 
+
+    "my_opinion" : "The model predictions are terrible !!! All predictions are 1 !! Test sample size 30 and real output has 0 (16 pieces)",
+    "reason" : "I sended X_test samples WITHOUT SCALING but X 300 samples trained with SCALING !!",
+    "solution" : "I added to predict endpoint convert from real inputs to scaled inputs inside API."
+}

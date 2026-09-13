@@ -266,6 +266,11 @@ async fn run_training(
         model.trained_epochs += request.epochs;
         model.last_loss = Some(final_loss);
         model.updated_at_ms = now_ms();
+        // Kept for `predict`. A plain train leaves them alone: data trained on
+        // after a scaled run has to be on the same scale to make sense anyway.
+        if ten_power_ratios.is_some() {
+            model.ten_power_ratios.clone_from(&ten_power_ratios);
+        }
 
         model.trained_epochs
     };
@@ -311,21 +316,32 @@ pub async fn predict(
         run_blocking(move || matrix_from_request(&config, "x", x, x_path)).await?
     };
 
-    let (model_id, spec, weights) = {
+    let (model_id, spec, weights, ten_power_ratios) = {
         let model = handle.read().await;
         validate_features(&model.spec, &x_rows, &limits)?;
+        let ten_power_ratios = model.ten_power_ratios.clone().filter(|_| request.scale);
 
-        (model.id, model.spec.clone(), model.weights.clone())
+        (model.id, model.spec.clone(), model.weights.clone(), ten_power_ratios)
     };
 
+    // `matrix_of` refuses non-finite values, so it looks at x once it is scaled.
+    let mut x_rows = x_rows;
+    if let Some(ratios) = &ten_power_ratios {
+        engine::scale_x_columns(&mut x_rows, ratios);
+    }
     let x = engine::matrix_of(&x_rows, "x")?;
-    let predictions = run_blocking(move || catch_engine_panic(|| engine::predict(&spec, &weights, &x))).await?;
+    let mut predictions = run_blocking(move || catch_engine_panic(|| engine::predict(&spec, &weights, &x))).await?;
+    if let Some(&y_ratio) = ten_power_ratios.as_ref().and_then(|ratios| ratios.last()) {
+        engine::unscale_predictions(&mut predictions, y_ratio);
+    }
 
     Ok(Json(PredictResponse {
         id: model_id,
         rows: predictions.len(),
         columns: predictions.first().map_or(0, Vec::len),
         predictions,
+        scaled: ten_power_ratios.is_some(),
+        ten_power_ratios,
     }))
 }
 

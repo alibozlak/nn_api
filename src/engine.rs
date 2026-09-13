@@ -137,6 +137,28 @@ pub fn predict(spec: &ModelSpec, weights: &[LayerWeights], x: &Matrix) -> Vec<Ve
     rows_of(&build(spec, weights).predict(x))
 }
 
+/// `column_based_scaling`'s division, replayed on new samples: column `j` of
+/// every row is multiplied by `10^-ratios[j]`, the exact expression neuralflow
+/// uses, so a row the model was trained on comes out bit for bit the same.
+pub fn scale_x_columns(rows: &mut [Vec<f64>], ratios: &[usize]) {
+    for row in rows {
+        for (value, ratio) in row.iter_mut().zip(ratios) {
+            *value *= ten_to_the(-(*ratio as i32));
+        }
+    }
+}
+
+/// The other way for the output: every value multiplied by `10^y_ratio`, back
+/// into the units `y` was sent in.
+pub fn unscale_predictions(rows: &mut [Vec<f64>], y_ratio: usize) {
+    let factor = ten_to_the(y_ratio as i32);
+    rows.iter_mut().flatten().for_each(|value| *value *= factor);
+}
+
+fn ten_to_the(exponent: i32) -> f64 {
+    10.0_f64.powi(exponent)
+}
+
 /// Keras' `evaluate(x, y)`.
 pub fn evaluate(spec: &ModelSpec, weights: &[LayerWeights], x: &Matrix, y: &Matrix) -> f64 {
     build(spec, weights).evaluate(x, y)

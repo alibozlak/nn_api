@@ -157,6 +157,11 @@ pub struct StoredModel {
     /// The last epoch's loss of the last train call.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub last_loss: Option<f64>,
+    /// The power of ten each column was divided by in the last column-scaled
+    /// training run: one per feature, then y's. `predict` scales x with these
+    /// and turns the output back into y's units. `None` until such a run.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ten_power_ratios: Option<Vec<usize>>,
 }
 
 /// Everything a new model is made of, before the store gives it an id.

@@ -85,6 +85,7 @@ impl AppState {
             updated_at_ms: now,
             trained_epochs: 0,
             last_loss: None,
+            ten_power_ratios: None,
         };
 
         let mut models = self.write_models();

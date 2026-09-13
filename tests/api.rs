@@ -1019,9 +1019,52 @@ async fn training_with_column_scale_fits_the_scaled_data_and_reports_the_ratios(
     assert!(run["initial_loss"].as_f64().unwrap() < 100., "{run}");
     assert!(unscaled.get("ten_power_ratios").is_none(), "a plain train reports no ratios: {unscaled}");
 
-    // The trained weights were stored like any other run's.
+    // The trained weights were stored like any other run's, and so were the ratios.
     let (_, model) = call(&app, Method::GET, &format!("/models/{id}"), None).await;
     assert_eq!(model["trained_epochs"], 50);
+    assert_eq!(model["ten_power_ratios"], json!([3, 0, 5]));
+    let (_, raw_model) = call(&app, Method::GET, &format!("/models/{raw}"), None).await;
+    assert!(raw_model.get("ten_power_ratios").is_none(), "{raw_model}");
+}
+
+#[tokio::test]
+async fn predict_scales_raw_samples_with_the_ratios_the_model_kept() {
+    let app = api();
+    let (x, y) = house_prices();
+    let id = regression_model(&app).await;
+    let body = json!({ "model_id": id, "x": x, "y": y, "epochs": 50, "return_history": false });
+    let (status, run) = call(&app, Method::POST, "/train-with-column-scale", Some(body)).await;
+    assert_eq!(status, StatusCode::OK, "{run}");
+
+    // The twin is trained on data scaled by hand, so it keeps no ratios and
+    // predicts on scaled values in scaled units.
+    let (_, scaled) = call(&app, Method::POST, "/utils/scale", Some(json!({ "x": x, "y": y }))).await;
+    let twin = regression_model(&app).await;
+    let body = json!({ "x": scaled["x"], "y": scaled["y"], "epochs": 50, "return_history": false });
+    call(&app, Method::POST, &format!("/models/{twin}/train"), Some(body)).await;
+
+    let (status, answer) = call(&app, Method::POST, &format!("/models/{id}/predict"), Some(json!({ "x": x }))).await;
+    assert_eq!(status, StatusCode::OK, "{answer}");
+    assert_eq!(answer["scaled"], true);
+    assert_eq!(answer["ten_power_ratios"], json!([3, 0, 5]));
+
+    let (_, by_hand) = call(&app, Method::POST, &format!("/models/{twin}/predict"), Some(json!({ "x": scaled["x"] }))).await;
+    assert_eq!(by_hand["scaled"], false);
+    assert!(by_hand.get("ten_power_ratios").is_none(), "{by_hand}");
+
+    let column = |answer: &Value| -> Vec<f64> {
+        answer["predictions"].as_array().unwrap().iter().map(|row| row[0].as_f64().unwrap()).collect()
+    };
+    for (price, scaled_price) in column(&answer).iter().zip(column(&by_hand)) {
+        let expected = scaled_price * 1e5;
+        assert!((price - expected).abs() <= expected.abs() * 1e-12, "{price} is not {expected}");
+    }
+
+    // `scale: false` hands x to the model as it is: the same as the twin on scaled x.
+    let body = json!({ "x": scaled["x"], "scale": false });
+    let (_, unscaled) = call(&app, Method::POST, &format!("/models/{id}/predict"), Some(body)).await;
+    assert_eq!(unscaled["scaled"], false);
+    assert_eq!(unscaled["predictions"], by_hand["predictions"]);
 }
 
 #[tokio::test]
