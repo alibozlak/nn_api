@@ -7,13 +7,13 @@ use axum::Router;
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode, header};
 use http_body_util::BodyExt;
-use rust_nn_api::config::Config;
-use rust_nn_api::store::AppState;
+use local_rust_nn_api::config::Config;
+use local_rust_nn_api::store::AppState;
 use serde_json::{Value, json};
 use tower::ServiceExt;
 
 fn api() -> Router {
-    rust_nn_api::app(AppState::new(Config::default()))
+    local_rust_nn_api::app(AppState::new(Config::default()))
 }
 
 /// One request, its status and its parsed JSON body.
@@ -85,7 +85,7 @@ async fn health_reports_the_service() {
 
     assert_eq!(status, StatusCode::OK);
     assert_eq!(body["status"], "ok");
-    assert_eq!(body["service"], "rust_nn_api");
+    assert_eq!(body["service"], env!("CARGO_PKG_NAME"));
     assert_eq!(body["models"], 0);
 }
 
@@ -683,7 +683,7 @@ fn data_dir(label: &str) -> PathBuf {
 fn api_reading(dir: &Path) -> Router {
     let config = Config { data_dir: Some(dir.canonicalize().expect("the temp directory exists")), ..Config::default() };
 
-    rust_nn_api::app(AppState::new(config))
+    local_rust_nn_api::app(AppState::new(config))
 }
 
 fn write_json(dir: &Path, name: &str, value: &Value) {

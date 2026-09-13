@@ -1,4 +1,4 @@
-# nn_api
+# local_rust_nn_api
 
 An HTTP/JSON API over [neuralflow](https://crates.io/crates/neuralflow). JSON goes in,
 JSON comes back, so a client in any language -- Java here -- can build, train and

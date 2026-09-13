@@ -1,7 +1,7 @@
 //! Starts the API. Everything it serves lives in the library next to it, so
 //! the integration tests can build the same router without a socket.
 
-use rust_nn_api::config::Config;
+use local_rust_nn_api::config::Config;
 use tokio::net::TcpListener;
 use tokio::signal;
 use tracing_subscriber::EnvFilter;
@@ -20,10 +20,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         body_limit_mb = config.body_limit_bytes / (1024 * 1024),
         max_models = config.limits.max_models,
         data_dir = config.data_dir.as_ref().map_or_else(|| String::from("off"), |dir| dir.display().to_string()),
-        "nn_api is listening"
+        "{} is listening",
+        env!("CARGO_PKG_NAME")
     );
 
-    axum::serve(listener, rust_nn_api::app_from_config(config))
+    axum::serve(listener, local_rust_nn_api::app_from_config(config))
         .with_graceful_shutdown(shutdown_signal())
         .await?;
 

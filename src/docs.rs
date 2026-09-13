@@ -25,7 +25,6 @@ pub struct OnnxFile(#[allow(dead_code)] Vec<u8>);
 #[derive(OpenApi)]
 #[openapi(
     info(
-        title = "nn_api",
         description = "An HTTP/JSON API over neuralflow: build, train and query a neural network. \
                        Every non-2xx answer has the ErrorResponse shape."
     ),
