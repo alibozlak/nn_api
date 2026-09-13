@@ -1,4 +1,11 @@
+# Out dir 
 /target
 
+# IDE ignores
 /.idea
 /.vscode
+
+# Dockerfile and .dockerignore 
+.dockerignore
+Dockerfile
+
