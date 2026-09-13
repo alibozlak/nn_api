@@ -10,7 +10,8 @@ use serde::de::{self, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
 use uuid::Uuid;
 
-use crate::config::Limits;
+use crate::config::{Config, Limits};
+use crate::dataset;
 use crate::engine::ModelReport;
 use crate::error::ApiError;
 use crate::model::{
@@ -101,7 +102,7 @@ pub struct LayerRequest {
     pub name: Option<String>,
 }
 
-/// `POST /models`
+/// `POST /create-compile-model`
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CreateModelRequest {
@@ -194,10 +195,19 @@ impl CreateModelRequest {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct TrainRequest {
-    /// One row per sample, one column per feature.
-    pub x: Vec<Vec<f64>>,
+    /// One row per sample, one column per feature. Send this or `x_path`.
+    #[serde(default)]
+    pub x: Option<Vec<Vec<f64>>>,
+    /// A JSON file below the server's data directory holding the same array
+    /// `x` would have held, for data too big to put in the request.
+    #[serde(default)]
+    pub x_path: Option<String>,
     /// One row per sample, one column per unit of the last layer.
-    pub y: Vec<Vec<f64>>,
+    #[serde(default)]
+    pub y: Option<Vec<Vec<f64>>>,
+    /// `y` from a file, like `x_path`.
+    #[serde(default)]
+    pub y_path: Option<String>,
     /// Keras' default is 1.
     #[serde(default = "default_epochs")]
     pub epochs: usize,
@@ -226,15 +236,27 @@ pub struct TrainRequest {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PredictRequest {
-    pub x: Vec<Vec<f64>>,
+    #[serde(default)]
+    pub x: Option<Vec<Vec<f64>>>,
+    /// `x` from a JSON file below the server's data directory.
+    #[serde(default)]
+    pub x_path: Option<String>,
 }
 
 /// `POST /models/{id}/evaluate` -- Keras' `evaluate`.
 #[derive(Debug, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EvaluateRequest {
-    pub x: Vec<Vec<f64>>,
-    pub y: Vec<Vec<f64>>,
+    #[serde(default)]
+    pub x: Option<Vec<Vec<f64>>>,
+    /// `x` from a JSON file below the server's data directory.
+    #[serde(default)]
+    pub x_path: Option<String>,
+    #[serde(default)]
+    pub y: Option<Vec<Vec<f64>>>,
+    /// `y` from a JSON file below the server's data directory.
+    #[serde(default)]
+    pub y_path: Option<String>,
     /// Evaluates against this loss instead of the compiled one.
     #[serde(default)]
     pub loss: Option<LossKind>,
@@ -350,6 +372,8 @@ pub struct ModelListEntry {
     pub total_params: usize,
     pub loss: Option<LossKind>,
     pub optimizer: Option<OptimizerConfig>,
+    pub seed: u64,
+    pub batch_size: usize,
     pub trained_epochs: usize,
     pub last_loss: Option<f64>,
     pub created_at_ms: u64,
@@ -366,6 +390,8 @@ impl From<&StoredModel> for ModelListEntry {
             total_params: model.spec.total_params(),
             loss: model.spec.loss,
             optimizer: model.spec.optimizer,
+            seed: model.spec.seed,
+            batch_size: model.batch_size,
             trained_epochs: model.trained_epochs,
             last_loss: model.last_loss,
             created_at_ms: model.created_at_ms,
@@ -442,6 +468,28 @@ pub struct HealthResponse {
 }
 
 // -------------------------------------------------------------- validation
+
+/// The values of `x` or `y`, whichever way the request chose to send them.
+///
+/// Reading and parsing a file is blocking work, so callers run this on the
+/// blocking pool rather than on an async worker.
+pub fn matrix_from_request(
+    config: &Config,
+    field: &str,
+    inline: Option<Vec<Vec<f64>>>,
+    path: Option<String>,
+) -> Result<Vec<Vec<f64>>, ApiError> {
+    match (inline, path) {
+        (Some(_), Some(_)) => Err(ApiError::bad_request(format!(
+            "send either '{field}' or '{field}_path', not both"
+        ))),
+        (Some(values), None) => Ok(values),
+        (None, Some(path)) => dataset::load_matrix(config, field, &path),
+        (None, None) => Err(ApiError::bad_request(format!(
+            "'{field}' is missing; send the values inline as '{field}', or name a file with '{field}_path'"
+        ))),
+    }
+}
 
 /// Keras' naming, done here rather than inside neuralflow so that every layer
 /// reaches the engine with an explicit name: "dense", "dense_1", "dense_2", ...

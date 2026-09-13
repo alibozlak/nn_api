@@ -19,6 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         address = %listener.local_addr()?,
         body_limit_mb = config.body_limit_bytes / (1024 * 1024),
         max_models = config.limits.max_models,
+        data_dir = config.data_dir.as_ref().map_or_else(|| String::from("off"), |dir| dir.display().to_string()),
         "nn_api is listening"
     );
 

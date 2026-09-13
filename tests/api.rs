@@ -1,6 +1,8 @@
 //! The API driven end to end, the way the Java client will drive it: JSON in,
 //! JSON out, over the real router.
 
+use std::path::{Path, PathBuf};
+
 use axum::Router;
 use axum::body::Body;
 use axum::http::{Method, Request, StatusCode, header};
@@ -341,6 +343,8 @@ async fn models_are_listed_and_deleted() {
     assert_eq!(list["count"], 1);
     assert_eq!(list["models"][0]["name"], "xor");
     assert_eq!(list["models"][0]["total_params"], 33);
+    assert_eq!(list["models"][0]["seed"], 1234);
+    assert_eq!(list["models"][0]["batch_size"], 32);
 
     let (status, _) = call_raw(&app, Method::DELETE, &format!("/models/{id}"), None).await;
     assert_eq!(status, StatusCode::NO_CONTENT);
@@ -661,4 +665,170 @@ async fn a_non_finite_sample_is_refused() {
 
     assert!(status.is_client_error(), "an infinite feature was accepted");
     assert!(!error["error"]["message"].as_str().unwrap_or_default().is_empty());
+}
+
+
+// ----------------------------------------------- training data from a file
+
+/// A directory of this test's own, for the server to read data out of.
+fn data_dir(label: &str) -> PathBuf {
+    let dir = std::env::temp_dir().join(format!("nn_api_{}_{label}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(&dir).expect("a temp directory can be made");
+
+    dir
+}
+
+/// A server allowed to read files, out of `dir` and nowhere else.
+fn api_reading(dir: &Path) -> Router {
+    let config = Config { data_dir: Some(dir.canonicalize().expect("the temp directory exists")), ..Config::default() };
+
+    rust_nn_api::app(AppState::new(config))
+}
+
+fn write_json(dir: &Path, name: &str, value: &Value) {
+    std::fs::write(dir.join(name), value.to_string()).expect("the temp file can be written");
+}
+
+#[tokio::test]
+async fn training_data_can_come_from_files() {
+    let dir = data_dir("from_files");
+    let (x, y) = xor_samples();
+    write_json(&dir, "x.json", &x);
+    write_json(&dir, "y.json", &y);
+
+    let app = api_reading(&dir);
+    let id = id_of(&create(&app, xor_model()).await);
+
+    let (status, training) = call(
+        &app,
+        Method::POST,
+        &format!("/models/{id}/train"),
+        Some(json!({ "x_path": "x.json", "y_path": "y.json", "epochs": 500, "return_history": false })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{training}");
+    assert_eq!(training["samples"], 4);
+    assert!(training["final_loss"].as_f64().unwrap() < 0.1, "{training}");
+
+    // predict and evaluate read a file the same way.
+    let (status, prediction) = call(&app, Method::POST, &format!("/models/{id}/predict"), Some(json!({ "x_path": "x.json" }))).await;
+    assert_eq!(status, StatusCode::OK, "{prediction}");
+    assert_eq!(prediction["rows"], 4);
+
+    let (status, evaluation) = call(
+        &app,
+        Method::POST,
+        &format!("/models/{id}/evaluate"),
+        Some(json!({ "x_path": "x.json", "y_path": "y.json" })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{evaluation}");
+    assert_eq!(evaluation["samples"], 4);
+
+    // A file further down is fine; only leaving the directory is not.
+    std::fs::create_dir_all(dir.join("sets")).unwrap();
+    write_json(&dir.join("sets"), "x.json", &x);
+    let (status, answer) = call(&app, Method::POST, &format!("/models/{id}/predict"), Some(json!({ "x_path": "sets/x.json" }))).await;
+    assert_eq!(status, StatusCode::OK, "{answer}");
+
+    // And the two ways of sending data may be mixed.
+    let (status, answer) = call(
+        &app,
+        Method::POST,
+        &format!("/models/{id}/evaluate"),
+        Some(json!({ "x_path": "x.json", "y": y })),
+    )
+    .await;
+    assert_eq!(status, StatusCode::OK, "{answer}");
+
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[tokio::test]
+async fn a_path_cannot_leave_the_data_directory() {
+    let dir = data_dir("jail");
+    let (x, _) = xor_samples();
+    write_json(&dir, "x.json", &x);
+
+    // A readable file beside the data directory: what a caller must not reach.
+    let outside = dir.parent().unwrap().join(format!("nn_api_{}_outside.json", std::process::id()));
+    std::fs::write(&outside, x.to_string()).unwrap();
+
+    let app = api_reading(&dir);
+    let id = id_of(&create(&app, xor_model()).await);
+
+    let mut attempts = vec![
+        json!(format!("../{}", outside.file_name().unwrap().to_string_lossy())),
+        json!("../../etc/passwd"),
+        json!("/etc/passwd"),
+        json!(outside.to_string_lossy()),
+        json!("sets/../../etc/passwd"),
+    ];
+    // A symbolic link is what canonicalising the path defends against.
+    #[cfg(unix)]
+    {
+        std::os::unix::fs::symlink(&outside, dir.join("link.json")).unwrap();
+        attempts.push(json!("link.json"));
+    }
+
+    for attempt in attempts {
+        let (status, error) = call(
+            &app,
+            Method::POST,
+            &format!("/models/{id}/predict"),
+            Some(json!({ "x_path": attempt })),
+        )
+        .await;
+
+        assert_eq!(status, StatusCode::BAD_REQUEST, "{attempt} was allowed through: {error}");
+        assert_eq!(error["error"]["code"], "invalid_request", "{attempt}");
+    }
+
+    let _ = std::fs::remove_file(&outside);
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[tokio::test]
+async fn reading_files_is_off_until_a_data_directory_is_set() {
+    let app = api();
+    let id = id_of(&create(&app, xor_model()).await);
+
+    let (status, error) = call(&app, Method::POST, &format!("/models/{id}/predict"), Some(json!({ "x_path": "x.json" }))).await;
+
+    assert_eq!(status, StatusCode::BAD_REQUEST);
+    assert!(
+        error["error"]["message"].as_str().unwrap().contains("NN_API_DATA_DIR"),
+        "{}",
+        error["error"]["message"]
+    );
+}
+
+#[tokio::test]
+async fn x_must_arrive_exactly_one_way() {
+    let dir = data_dir("one_way");
+    let (x, _) = xor_samples();
+    write_json(&dir, "x.json", &x);
+    std::fs::write(dir.join("not_a_matrix.json"), r#"{ "hello": 1 }"#).unwrap();
+
+    let app = api_reading(&dir);
+    let id = id_of(&create(&app, xor_model()).await);
+    let predict = format!("/models/{id}/predict");
+
+    let cases: Vec<(Value, &str)> = vec![
+        (json!({ "x": x, "x_path": "x.json" }), "not both"),
+        (json!({}), "missing"),
+        (json!({ "x_path": "nope.json" }), "there is no file"),
+        (json!({ "x_path": "not_a_matrix.json" }), "array of arrays"),
+    ];
+
+    for (body, expected) in cases {
+        let (status, error) = call(&app, Method::POST, &predict, Some(body.clone())).await;
+        let message = error["error"]["message"].as_str().unwrap_or_default();
+
+        assert_eq!(status, StatusCode::BAD_REQUEST, "{body} answered {error}");
+        assert!(message.contains(expected), "{body} answered '{message}', expected it to mention '{expected}'");
+    }
+
+    let _ = std::fs::remove_dir_all(&dir);
 }

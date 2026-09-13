@@ -18,6 +18,7 @@
 //! ```
 
 pub mod config;
+pub mod dataset;
 pub mod dto;
 pub mod engine;
 pub mod error;
@@ -57,8 +58,9 @@ pub fn app(state: AppState) -> Router {
         .route("/utils/scale", post(routes::scale))
         .fallback(routes::not_found)
         .method_not_allowed_fallback(method_not_allowed)
-        // Training data arrives as JSON numbers, so the body limit is the real
-        // limit on how many samples one call can carry.
+        // Inline training data arrives as JSON numbers, so this caps how many
+        // samples one call can carry in its body; x_path and y_path are
+        // capped by NN_API_MAX_FILE_MB instead.
         .layer(DefaultBodyLimit::max(body_limit))
         .layer(TraceLayer::new_for_http())
         // The handlers already catch neuralflow's panics; this is the net under

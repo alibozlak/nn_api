@@ -2,7 +2,8 @@
 
 An HTTP/JSON API over [neuralflow](https://crates.io/crates/neuralflow). JSON goes in,
 JSON comes back, so a client in any language -- Java here -- can build, train and
-query a neural network without linking Rust.
+query a neural network without linking Rust. It runs beside that client, on
+the same machine.
 
 The endpoints follow Keras, because neuralflow does:
 
@@ -20,13 +21,16 @@ The endpoints follow Keras, because neuralflow does:
 
 ```bash
 cargo run --release          # debug builds train roughly 10x slower
-curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8079/health
 ```
 
 | Variable | Default | What it does |
 | --- | --- | --- |
-| `NN_API_ADDR` | `127.0.0.1:8080` | Address to bind. Use `0.0.0.0:8080` to accept connections from another machine. |
-| `NN_API_BODY_LIMIT_MB` | `32` | Biggest request body. Training data is JSON, so this is the real cap on samples per call. |
+| `NN_API_ADDR` | `127.0.0.1:8079` | Address to bind. It has to be a loopback address; anything else is refused at startup. The default is deliberately not 8080, Spring Boot's own, so a Spring Boot client on the same machine does not collide with it. |
+| `NN_API_ALLOW_REMOTE` | unset | `yes` lifts that check, for when something that authenticates sits in front of the server. |
+| `NN_API_DATA_DIR` | unset | Directory `x_path` and `y_path` are read from. Unset, a request naming a path is refused. |
+| `NN_API_MAX_FILE_MB` | `256` | Biggest file `x_path` or `y_path` may point at. |
+| `NN_API_BODY_LIMIT_MB` | `32` | Biggest request body, so the cap on data sent inline. Data read through `x_path` and `y_path` is capped by `NN_API_MAX_FILE_MB` instead. |
 | `NN_API_LOG` | `info` | `tracing` filter, e.g. `debug,tower_http=debug`. |
 | `NN_API_CORS` | unset | `permissive` turns CORS on. Browsers only -- a Java client never sends a preflight. |
 | `NN_API_MAX_MODELS` | `256` | Models held at once. |
@@ -200,6 +204,32 @@ short ones are not quite the same run.
 instead of the compiled one. It answers `{ "loss": 0.0011, "samples": 4, ... }`
 and changes nothing about the model.
 
+### Data from a file instead of the body
+
+`train`, `predict` and `evaluate` can read `x` and `y` from JSON files rather
+than the request body, which matters once a data set outgrows a request:
+
+```json
+{ "x_path": "sets/train_x.json", "y_path": "sets/train_y.json", "epochs": 500 }
+```
+
+Each file holds exactly what the field would have held -- `[[0, 0], [0, 1], ...]`.
+Send `x` or `x_path`, not both; the two ways can be mixed, `x` from a file and
+`y` inline.
+
+The server has to be started with `NN_API_DATA_DIR`, and every path is taken
+relative to that directory:
+
+```bash
+NN_API_DATA_DIR=/home/me/nn_data cargo run --release
+```
+
+Letting a caller choose a file on the server's disk is how arbitrary files get
+read, so the directory is a hard boundary: absolute paths and `..` are refused,
+and the path is canonicalised so a symbolic link pointing out of the directory
+is refused too. Being bound to `127.0.0.1` does not make this unnecessary --
+every user on the machine can reach the server, not only your application.
+
 ### `GET` and `PUT /models/{id}/weights`
 
 Keras' `get_weights` and `set_weights`. `W` is `input_count` rows of `units`
@@ -258,6 +288,7 @@ way it parses results:
 | 404 | `not_found` | No model with that id, or no such path. |
 | 405 | `method_not_allowed` | The path exists, but not with this method. |
 | 409 | `conflict` | `NN_API_MAX_MODELS` reached. |
+| 413 | `payload_too_large` | The body is bigger than `NN_API_BODY_LIMIT_MB`. Send the data through `x_path` and `y_path` instead. |
 | 415 | `unsupported_media_type` | `Content-Type: application/json` is missing. |
 | 422 | `invalid_json` | The JSON parsed but does not fit the request type -- an unknown field, `"activation": "softmax"`. The message names the field and lists what is allowed. |
 | 422 | `engine_error` | neuralflow refused the values. Its own message is passed through. |
@@ -277,7 +308,7 @@ import java.net.URI;
 import java.net.http.*;
 
 HttpClient client = HttpClient.newHttpClient();
-String base = "http://127.0.0.1:8080";
+String base = "http://127.0.0.1:8079";
 
 // 1. Create the model.
 HttpResponse<String> created = client.send(
@@ -321,7 +352,7 @@ HttpResponse<String> prediction = client.send(
     HttpResponse.BodyHandlers.ofString());
 ```
 
-Two things to watch on the Java side:
+Three things to watch on the Java side:
 
 - **`Content-Type: application/json` is required.** Without it the server
   answers 415, and `HttpClient` does not add it for you.
@@ -346,9 +377,10 @@ Two things to watch on the Java side:
   `weights` field of `POST /create-compile-model` are how a client keeps one;
   nothing is written to disk here. It also means one process owns the models:
   two instances behind a load balancer would not see each other's.
-- **No authentication.** The default bind address is `127.0.0.1`, so nothing
-  reaches it from outside the machine until you change `NN_API_ADDR`. Put it
-  behind something that authenticates before you do.
+- **Localhost only, and no authentication.** The server refuses to start on
+  an address other machines could reach. Everyone *on* the machine can still
+  call it. `NN_API_ALLOW_REMOTE=yes` lifts the check, which is only sensible
+  with something that authenticates in front of it.
 - **One training run per model at a time.** A second train call on the same
   model waits for the first; runs on *different* models go in parallel. A long
   run blocks nothing else, though: predictions on the model being trained are
@@ -360,7 +392,7 @@ Two things to watch on the Java side:
 ## Development
 
 ```bash
-cargo test      # 20 integration tests, end to end over the real router
+cargo test      # 26 integration tests over the real router, 2 unit tests
 cargo clippy --all-targets
 ```
 

@@ -79,7 +79,7 @@ pub async fn delete_model(State(state): State<AppState>, Path(id): Path<String>)
 pub async fn train(
     State(state): State<AppState>,
     Path(id): Path<String>,
-    ApiJson(request): ApiJson<TrainRequest>,
+    ApiJson(mut request): ApiJson<TrainRequest>,
 ) -> Result<Json<TrainResponse>, ApiError> {
     let limits = state.config().limits;
     let id = parse_id(&id)?;
@@ -95,10 +95,27 @@ pub async fn train(
         )));
     }
 
+    // x and y arrive either inline or as a path into the server's data
+    // directory; opening and parsing a file is blocking work, like the
+    // training that follows it.
+    let (x_rows, y_rows) = {
+        let config = state.config().clone();
+        let (x, x_path) = (request.x.take(), request.x_path.take());
+        let (y, y_path) = (request.y.take(), request.y_path.take());
+
+        run_blocking(move || {
+            Ok((
+                matrix_from_request(&config, "x", x, x_path)?,
+                matrix_from_request(&config, "y", y, y_path)?,
+            ))
+        })
+        .await?
+    };
+
     // Everything the run needs, copied out under a short read lock.
     let (run_spec, weights, loss, optimizer, batch_size) = {
         let model = handle.read().await;
-        validate_samples(&model.spec, &request.x, &request.y, &limits)?;
+        validate_samples(&model.spec, &x_rows, &y_rows, &limits)?;
 
         // The request's batch size wins for this run; the model's default is
         // what a request that sends none gets.
@@ -127,9 +144,9 @@ pub async fn train(
         (run_spec, model.weights.clone(), loss, optimizer, batch_size)
     };
 
-    let x = engine::matrix_of(&request.x, "x")?;
-    let y = engine::matrix_of(&request.y, "y")?;
-    let samples = request.x.len();
+    let x = engine::matrix_of(&x_rows, "x")?;
+    let y = engine::matrix_of(&y_rows, "y")?;
+    let samples = x_rows.len();
     let options = FitOptions { epochs: request.epochs, batch_size, shuffle: request.shuffle, verbose: false };
 
     let started = Instant::now();
@@ -175,19 +192,26 @@ pub async fn train(
 pub async fn predict(
     State(state): State<AppState>,
     Path(id): Path<String>,
-    ApiJson(request): ApiJson<PredictRequest>,
+    ApiJson(mut request): ApiJson<PredictRequest>,
 ) -> Result<Json<PredictResponse>, ApiError> {
     let limits = state.config().limits;
     let handle = state.handle(parse_id(&id)?)?;
 
+    let x_rows = {
+        let config = state.config().clone();
+        let (x, x_path) = (request.x.take(), request.x_path.take());
+
+        run_blocking(move || matrix_from_request(&config, "x", x, x_path)).await?
+    };
+
     let (model_id, spec, weights) = {
         let model = handle.read().await;
-        validate_features(&model.spec, &request.x, &limits)?;
+        validate_features(&model.spec, &x_rows, &limits)?;
 
         (model.id, model.spec.clone(), model.weights.clone())
     };
 
-    let x = engine::matrix_of(&request.x, "x")?;
+    let x = engine::matrix_of(&x_rows, "x")?;
     let predictions = run_blocking(move || catch_engine_panic(|| engine::predict(&spec, &weights, &x))).await?;
 
     Ok(Json(PredictResponse {
@@ -202,14 +226,31 @@ pub async fn predict(
 pub async fn evaluate(
     State(state): State<AppState>,
     Path(id): Path<String>,
-    ApiJson(request): ApiJson<EvaluateRequest>,
+    ApiJson(mut request): ApiJson<EvaluateRequest>,
 ) -> Result<Json<EvaluateResponse>, ApiError> {
     let limits = state.config().limits;
     let handle = state.handle(parse_id(&id)?)?;
 
+    // x and y arrive either inline or as a path into the server's data
+    // directory; opening and parsing a file is blocking work, like the
+    // training that follows it.
+    let (x_rows, y_rows) = {
+        let config = state.config().clone();
+        let (x, x_path) = (request.x.take(), request.x_path.take());
+        let (y, y_path) = (request.y.take(), request.y_path.take());
+
+        run_blocking(move || {
+            Ok((
+                matrix_from_request(&config, "x", x, x_path)?,
+                matrix_from_request(&config, "y", y, y_path)?,
+            ))
+        })
+        .await?
+    };
+
     let (model_id, mut spec, weights) = {
         let model = handle.read().await;
-        validate_samples(&model.spec, &request.x, &request.y, &limits)?;
+        validate_samples(&model.spec, &x_rows, &y_rows, &limits)?;
 
         (model.id, model.spec.clone(), model.weights.clone())
     };
@@ -221,9 +262,9 @@ pub async fn evaluate(
     spec.loss = Some(loss);
     spec.optimizer = resolve_optimizer(None, Some(loss))?;
 
-    let x = engine::matrix_of(&request.x, "x")?;
-    let y = engine::matrix_of(&request.y, "y")?;
-    let samples = request.x.len();
+    let x = engine::matrix_of(&x_rows, "x")?;
+    let y = engine::matrix_of(&y_rows, "y")?;
+    let samples = x_rows.len();
     let loss_value = run_blocking(move || catch_engine_panic(|| engine::evaluate(&spec, &weights, &x, &y))).await?;
 
     Ok(Json(EvaluateResponse { id: model_id, loss_function: loss, loss: loss_value, samples }))
@@ -335,7 +376,7 @@ where
 }
 
 fn parse_id(raw: &str) -> Result<Uuid, ApiError> {
-    Uuid::parse_str(raw).map_err(|_| ApiError::bad_request(format!("'{raw}' is not a model id; an id is a UUID, as returned by POST /models")))
+    Uuid::parse_str(raw).map_err(|_| ApiError::bad_request(format!("'{raw}' is not a model id; an id is a UUID, as returned by POST /create-compile-model")))
 }
 
 /// A model name is whatever the client called it, and it ends up in a header

@@ -34,8 +34,8 @@ impl ApiError {
         Self::new(StatusCode::NOT_FOUND, "not_found", message)
     }
 
-    /// The body parsed, but neuralflow refused the values (a shape mismatch,
-    /// a zero batch size, ...): 422. This is where a caught panic lands.
+    /// The body parsed and passed validation, but neuralflow still refused
+    /// the values: 422. This is where a caught panic lands.
     pub fn engine(message: impl Into<String>) -> Self {
         Self::new(StatusCode::UNPROCESSABLE_ENTITY, "engine_error", message)
     }
