@@ -1,0 +1,170 @@
+{
+    "model_f35e78ca-c18e-47b9-89e4-ae217e187e4d": {
+        "id": "f35e78ca-c18e-47b9-89e4-ae217e187e4d",
+        "name": "nn-4-relu-1-sigmoid",
+        "features": 4,
+        "output_units": 1,
+        "total_params": 25,
+        "layers": [
+            {
+                "name": "layer1",
+                "units": 4,
+                "activation": "relu",
+                "input_count": 4,
+                "params": 20
+            },
+            {
+                "name": "layer2",
+                "units": 1,
+                "activation": "sigmoid",
+                "input_count": 4,
+                "params": 5
+            }
+        ],
+        "loss": "binary_crossentropy",
+        "optimizer": {
+            "type": "sgd",
+            "learning_rate": 0.03
+        },
+        "seed": 1234,
+        "batch_size": 300,
+        "trained_epochs": 0,
+        "last_loss": null,
+        "created_at_ms": 1789324563957,
+        "updated_at_ms": 1789324563957,
+        "summary": "Model: sequential"
+    },
+    "train-with-column-scale_endpoint_requests": [
+        {
+            "id": "f35e78ca-c18e-47b9-89e4-ae217e187e4d",
+            "epochs": 20000,
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.03
+            },
+            "initial_loss": 1.420400891956853,
+            "final_loss": 0.33194391343025376,
+            "trained_epochs": 20000,
+            "duration_ms": 359,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ]
+        }
+    ],
+    "tests-results": [
+        {
+            "id": "f35e78ca-c18e-47b9-89e4-ae217e187e4d",
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.05853860591848627, "real : 0", "Correct"
+                ],
+                [
+                    0.9192631731428914, "real : 1", "Correct"
+                ],
+                [
+                    0.0470386855380961, "real : 0", "Correct"
+                ],
+                [
+                    0.9937037473048902, "real : 1", "Correct"
+                ],
+                [
+                    0.301894525475526, "real : 0", "Correct"
+                ],
+                [
+                    0.9993934842351995, "real : 1.0", "Correct"
+                ],
+                [
+                    0.011765371187901708, "real : 0", "Correct"
+                ],
+                [
+                    0.820557521211704, "real : 0", "Wrong. Terrible prediction"
+                ],
+                [
+                    0.2965296958791525, "real : 0", "Correct"
+                ],
+                [
+                    0.017691428532970947, "real : 0", "Correct"
+                ],
+                [
+                    0.9976083780619506, "real : 1", "Correct"
+                ],
+                [
+                    0.9355935506208726, "real : 1", "Correct"
+                ],
+                [
+                    0.6668775652905677, "real : 1", "Correct"
+                ],
+                [
+                    0.18572887730165974, "real : 1", "Wrong. Terrible prediction"
+                ],
+                [
+                    0.8038579370759044, "real : 1.0", "Correct"
+                ],
+                [
+                    0.18383610302585174, "real : 0", "Correct"
+                ],
+                [
+                    0.9917559308386716, "real : 1", "Correct"
+                ],
+                [
+                    0.9999256531971007, "real : 1", "Correct"
+                ],
+                [
+                    0.9949050995951781, "real : 1", "Correct"
+                ],
+                [
+                    0.5080044284924367, "real : 0.0", "Wrong. Borderline prediction"
+                ],
+                [
+                    0.6139026460567424, "real : 1", "Correct"
+                ],
+                [
+                    0.8949141609347964, "real : 1", "Correct"
+                ],
+                [
+                    0.004668925272135322, "real : 0", "Correct"
+                ],
+                [
+                    0.08692838659201971, "real : 0", "Correct"
+                ],
+                [
+                    0.510671846194304, "real : 0", "Wrong. Borderline prediction"
+                ],
+                [
+                    0.1041861413683864, "real : 0.0", "Correct"
+                ],
+                [
+                    0.16013507113717154, "real : 1", "Wrong. Terrible prediction"
+                ],
+                [
+                    0.004058437907865978, "real : 0", "Correct"
+                ],
+                [
+                    0.4655445481372441, "real : 0", "Correct"
+                ],
+                [
+                    0.1038511373760577, "real : 0", "Correct"
+                ]
+            ],
+            "scaled": true,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ],
+            "success-ratio" : "% 83"
+        }
+    ],
+    "real-test-outputs": [0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0]
+}

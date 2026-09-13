@@ -1,0 +1,637 @@
+{
+    "model_57e8fd3b-f5bb-4d73-8312-458f6e772b93": {
+        "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+        "name": "nn-4-relu-1-sigmoid",
+        "features": 4,
+        "output_units": 1,
+        "total_params": 25,
+        "layers": [
+            {
+                "name": "layer1",
+                "units": 4,
+                "activation": "relu",
+                "input_count": 4,
+                "params": 20
+            },
+            {
+                "name": "layer2",
+                "units": 1,
+                "activation": "sigmoid",
+                "input_count": 4,
+                "params": 5
+            }
+        ],
+        "loss": "binary_crossentropy",
+        "optimizer": {
+            "type": "sgd",
+            "learning_rate": 0.003
+        },
+        "seed": 1234,
+        "batch_size": 300,
+        "trained_epochs": 0,
+        "last_loss": null,
+        "created_at_ms": 1789327802326,
+        "updated_at_ms": 1789327802326,
+        "summary": "Model: sequential"
+    },
+    "train-with-column-scale_endpoint_requests": [
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "epochs": 20000,
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 1.420400891956853,
+            "final_loss": 0.3594301368912184,
+            "trained_epochs": 20000,
+            "duration_ms": 340,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "epochs": "20_000",
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 0.3594261766695808,
+            "final_loss": 0.33500750368142246,
+            "trained_epochs": "40_000",
+            "duration_ms": 351,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ]
+        },
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "epochs": "20_000",
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 0.33500721689655366,
+            "final_loss": 0.33245762324357403,
+            "trained_epochs": "60_000",
+            "duration_ms": 354,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ]
+        }
+    ],
+    "tests-results": [
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.14067446225187938,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.8460613255011622,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.13603900874060293,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9632993869452943,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.354797227923385,
+                    "real : 0",
+                    "Correct"
+                ],
+                [
+                    0.9899380973945474,
+                    "real : 1.",
+                    "Correct :)"
+                ],
+                [
+                    0.0620946058380345,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.7128465356168534,
+                    "real : 0",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.32278721448809156,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.07246372124688173,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9686908563027812,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.8634672093537444,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.6320198282157626,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.33112114118582736,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.7600787042135518,
+                    "real : 1.",
+                    "Correct :)"
+                ],
+                [
+                    0.2512054127788658,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9499566102876207,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9981709321872951,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9570095328483741,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.5060232424626456,
+                    "real : 0.",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.6154926494988703,
+                    "real : 1",
+                    "Correct"
+                ],
+                [
+                    0.7202327265439243,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.02473322055094809,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.18156540480873962,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.5142571680208574,
+                    "real : 0",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.25149362494883526,
+                    "real : 0.0",
+                    "Correct :)"
+                ],
+                [
+                    0.22690266025922726,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.04141019737904433,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.5090662992746074,
+                    "real : 0",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.19748068088046095,
+                    "real : 0",
+                    "Correct :)"
+                ]
+            ],
+            "scaled": true,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ],
+            "success-ratio": "% 80"
+        },
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.07202419077604039,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9115199048000874,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.06286075706784493,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9901667756742439,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.3043582279826544,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9985456263037283,
+                    "real : 1.",
+                    "Correct :)"
+                ],
+                [
+                    0.018147751539141763,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.7899015866625567,
+                    "real : 0",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.27650594454582783,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.02499179050910358,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9942032693696008,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9243901921285583,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.6582698338339077,
+                    "real : 1",
+                    "Correct"
+                ],
+                [
+                    0.23364992858015493,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.8041754108322405,
+                    "real : 1.",
+                    "Correct :)"
+                ],
+                [
+                    0.18839041830833037,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9857942278204372,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9998285455998536,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9897110274826084,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.4918150257775486,
+                    "real : 0.",
+                    "Correct but Borderline prediction"
+                ],
+                [
+                    0.6268760273607469,
+                    "real : 1",
+                    "Correct"
+                ],
+                [
+                    0.8295165583847025,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.006217083464838357,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.1043686319114429,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.5153569229672794,
+                    "real : 0",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.1440822058055147,
+                    "real : 0.",
+                    "Correct :)"
+                ],
+                [
+                    0.16116964515334728,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.010854215124747447,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.4775271341190771,
+                    "real : 0",
+                    "Correct but Borderline prediction"
+                ],
+                [
+                    0.11842752720410098,
+                    "real : 0",
+                    "Correct :)"
+                ]
+            ],
+            "scaled": true,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ],
+            "success-ratio": "% 87"
+        },
+        {
+            "id": "57e8fd3b-f5bb-4d73-8312-458f6e772b93",
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.06251357627660105,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9176864987339672,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.051940743527873146,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9927005492179802,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.30111225852423595,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9991701335737936,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.013608873650998438,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.8098001298983177,
+                    "real : 0",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.28583328213322345,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.019800074038363574,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.996675934538377,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.932425209321246,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.6642242700174879,
+                    "real : 1",
+                    "Correct"
+                ],
+                [
+                    0.20309740673639085,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.8057087000086569,
+                    "real : 1.",
+                    "Correct :)"
+                ],
+                [
+                    0.18364474063673034,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.9899956233206231,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9999016869984831,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.9934058568303599,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.5003301976314491,
+                    "real : 0.",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.6202405142637373,
+                    "real : 1",
+                    "Correct"
+                ],
+                [
+                    0.8718938037905763,
+                    "real : 1",
+                    "Correct :)"
+                ],
+                [
+                    0.005025912724406711,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.0921977914567931,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.5126112751056737,
+                    "real : 0",
+                    "Wrong. Borderline prediction"
+                ],
+                [
+                    0.1178600286757922,
+                    "real : 0.",
+                    "Correct :)"
+                ],
+                [
+                    0.15843203506831796,
+                    "real : 1",
+                    "Wrong. Terrible prediction :("
+                ],
+                [
+                    0.006552921227039187,
+                    "real : 0",
+                    "Correct :)"
+                ],
+                [
+                    0.4698973229543735,
+                    "real : 0",
+                    "Correct but Borderline prediction"
+                ],
+                [
+                    0.10787936512532308,
+                    "real : 0",
+                    "Correct :)"
+                ]
+            ],
+            "scaled": true,
+            "ten_power_ratios": [
+                1,
+                4,
+                3,
+                0,
+                0
+            ],
+            "success-ratio": "% 83"
+        }
+    ],
+    "real-test-outputs": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0
+    ]
+}
