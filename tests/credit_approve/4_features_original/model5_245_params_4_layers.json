@@ -1,0 +1,208 @@
+{
+    "model5_245_params_4_layers": {
+        "id": "abab1bf6-2afa-41a1-a29f-c21979b355f2",
+        "name": "nn-lr-4u-relu-16u-relu-8u-relu-1u-sigmoid",
+        "features": 4,
+        "output_units": 1,
+        "total_params": 245,
+        "layers": [
+            {
+                "name": "layer1",
+                "units": 4,
+                "activation": "relu",
+                "input_count": 4,
+                "params": 20
+            },
+            {
+                "name": "layer2",
+                "units": 16,
+                "activation": "relu",
+                "input_count": 4,
+                "params": 80
+            },
+            {
+                "name": "layer3",
+                "units": 8,
+                "activation": "relu",
+                "input_count": 16,
+                "params": 136
+            },
+            {
+                "name": "layer4",
+                "units": 1,
+                "activation": "sigmoid",
+                "input_count": 8,
+                "params": 9
+            }
+        ],
+        "loss": "binary_crossentropy",
+        "optimizer": {
+            "type": "sgd",
+            "learning_rate": 0.003
+        },
+        "seed": 1234,
+        "batch_size": 300,
+        "trained_epochs": 0,
+        "last_loss": null,
+        "summary": "Model: sequential"
+    },
+    "ten_power_ratios": [
+        1,
+        4,
+        3,
+        0,
+        0
+    ],
+    "train-with-column-scale_endpoint_requests": [
+        {
+            "epochs": "20_000",
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 0.7004929393614447,
+            "final_loss": "0.33083768524618584  --> Same result model4. I think reason : Sample size (300)",
+            "trained_epochs": "20_000",
+            "duration_ms": "2088 ms (About 2 s)"
+        }
+    ],
+    "tests-results": [
+        {
+            "id": "abab1bf6-2afa-41a1-a29f-c21979b355f2",
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.05626078493820388, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.926572247467774, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.04559365554155952, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.9879481383858266, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.2996620340736765, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.9929142412743096, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.010576864049421627, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.8293363502889189, "Real: 0 --> Terrible predict :(", "Close to desicion boundry?? Statistic"
+                ],
+                [
+                    0.2918861236778014, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.016463964682198157, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.9882097420586835, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.9406357911863336, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.677007559974699, "Real: 1 --> Success but I should statistic"
+                ],
+                [
+                    0.1866913313571433, "Real: 1 --> Terrible :(", "Stat"
+                ],
+                [
+                    0.8138237328079645, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.17962985888067917, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.9849211012333573, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.9995539283810787, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.9926368585510941, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.5004032004283723, "Real: 0 --> Wrong but there is a development :)  <-----"
+                ],
+                [
+                    0.6247856110422754, "Real: 1 --> Success"
+                ],
+                [
+                    0.8947744630088397, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.004008201763634373, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.0820286740171833, "Real: 1 --> Success :)"
+                ],
+                [
+                    0.5135467759859577, "Real: 0 --> Wrong but Better than model4"
+                ],
+                [
+                    0.10258869676247913, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.1569005527194196, "Real: 1 --> Terrible prediction :(", "It has should need statistic review"
+                ],
+                [
+                    0.0041546007488815016, "Real: 0 --> Success :)"
+                ],
+                [
+                    0.46958371524883974, "Real: 0 --> Success but close to boundry"
+                ],
+                [
+                    0.09896984188665542, "Real: 0 --> Success :)"
+                ]
+            ],
+            "scaled": true,
+            "success-ratio": "% 83 --> Equavilent to previous models (model4 and model2)",
+            "info-1": "This model (model5) has 245 params, previous model has 91 params.",
+            "info-2": "This model has 4 layers and 4 + 16 + 8 + 1 units, model2 has 2 layers and 4 + 1 units",
+            "My hypothesis": "Sample size for train (300)"
+        }
+    ],
+    "real-test-outputs": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1.0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1.0,
+        0,
+        1,
+        1,
+        1,
+        0.0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0.0,
+        1,
+        0,
+        0,
+        0
+    ]
+}
