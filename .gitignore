@@ -9,3 +9,5 @@
 .dockerignore
 Dockerfile
 
+# WSL 2
+*.Identifier

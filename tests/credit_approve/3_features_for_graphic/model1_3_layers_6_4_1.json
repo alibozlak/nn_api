@@ -1,0 +1,210 @@
+{
+    "model1_3_layers_6u_4u_1u": {
+        "id": "d866afb4-287b-4959-b607-2cee25a3ba73",
+        "name": "nn-lr-3-layers",
+        "features": 3,
+        "output_units": 1,
+        "total_params": 57,
+        "layers": [
+            {
+                "name": "layer1",
+                "units": 6,
+                "activation": "relu",
+                "input_count": 3,
+                "params": 24
+            },
+            {
+                "name": "layer2",
+                "units": 4,
+                "activation": "relu",
+                "input_count": 6,
+                "params": 28
+            },
+            {
+                "name": "layer3",
+                "units": 1,
+                "activation": "sigmoid",
+                "input_count": 4,
+                "params": 5
+            }
+        ],
+        "loss": "binary_crossentropy",
+        "optimizer": {
+            "type": "sgd",
+            "learning_rate": 0.003
+        },
+        "seed": 1234,
+        "batch_size": 300,
+        "trained_epochs": 0,
+        "last_loss": null,
+        "summary": "Model: sequential"
+    },
+    "ten_power_ratios": [
+        1,
+        4,
+        3,
+        0
+    ],
+    "train-with-column-scale_endpoint_requests": [
+        {
+            "epochs": "20_000",
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 0.7042289915495877,
+            "final_loss": 0.44317948756171605,
+            "trained_epochs": 20000,
+            "duration_ms": 636
+        },
+        {
+            "epochs": "20_000",
+            "batch_size": 300,
+            "samples": 300,
+            "loss_function": "binary_crossentropy",
+            "optimizer": {
+                "type": "sgd",
+                "learning_rate": 0.003
+            },
+            "initial_loss": 0.4431720278053812,
+            "final_loss": "0.4110148860650967 --> Normally, not good",
+            "trained_epochs": "40_000",
+            "duration_ms": 643
+        }
+    ],
+    "tests-results": [
+        {
+            "rows": 30,
+            "columns": 1,
+            "predictions": [
+                [
+                    0.17799347230902604, "real: 0", "Correct. :)"
+                ],
+                [
+                    0.5669095283359314, "real: 1", "Correct but closely border"
+                ],
+                [
+                    0.13840355787573846, "real: 0", "Correct. :)"
+                ],
+                [
+                    0.933395309764976, "real: 1", "Correct :)"
+                ],
+                [
+                    0.47862260861965883, "real: 0", "Correct but closely border"
+                ],
+                [
+                    0.9730118285303212, "real: 1.", "Correct. :)"
+                ],
+                [
+                    0.10375259051138787, "real: 0", "Correct. :)"
+                ],
+                [
+                    0.7376813239580703, "real: 0", "Wrong and Terrible prediction"
+                ],
+                [
+                    0.6777210869701668, "real: 0", "Wrong and Terrible prediction"
+                ],
+                [
+                    0.11419700173736906, "real: 0", "Correct :)"
+                ],
+                [
+                    0.9947077956567537, "real: 1", "Correct :)"
+                ],
+                [
+                    0.7711038199977677, "real: 1", "Correct :)"
+                ],
+                [
+                    0.6430593345366674, "real: 1", "Correct"
+                ],
+                [
+                    0.16488905053091674, "real: 1", "Wrong and Terrible"
+                ],
+                [
+                    0.6304543126840868, "real: 1.", "Correct"
+                ],
+                [
+                    0.3949036998874266, "real: 0", "Correct"
+                ],
+                [
+                    0.9664014963992265, "real: 1", "Correct :)"
+                ],
+                [
+                    0.9568105438885108, "real: 1", "Correct :)"
+                ],
+                [
+                    0.9868952265620039, "real: 1", "Correct :)"
+                ],
+                [
+                    0.7455126606679462, "real: 0.", "Wrong and Terrible"
+                ],
+                [
+                    0.46779123938897216, "real: 1", "Wrong and Terrible"
+                ],
+                [
+                    0.9725527894710694, "real: 1", "Correct :)"
+                ],
+                [
+                    0.14461270020050213, "real: 0", "Correct :)"
+                ],
+                [
+                    0.22333657582743532, "real: 0", "Correct :)"
+                ],
+                [
+                    0.42608661056775265, "real: 0", "Correct but close to desicion boundry"
+                ],
+                [
+                    0.13067081534472882, "real: 0.", "Correct :)"
+                ],
+                [
+                    0.4674898746770313, "real: 1", "Wrong and Terrible"
+                ],
+                [
+                    0.06592263344079015, "real: 0", "Correct :)"
+                ],
+                [
+                    0.5557267786423403, "real: 0", "Wrong and Terrible"
+                ],
+                [
+                    0.32904345596126067, "real: 0", "Correct"
+                ]
+            ],
+            "scaled": true,
+            "success-ratio": "% 77 --> Feature count decreased from 4 to 3 and sample count for traning 300"
+        }
+    ],
+    "real-test-outputs": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1.0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1,
+        1.0,
+        0,
+        1,
+        1,
+        1,
+        0.0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        0.0,
+        1,
+        0,
+        0,
+        0
+    ]
+}
